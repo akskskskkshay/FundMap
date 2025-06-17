@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <main>
+    <main className="mt-5 ">
       <h1 className="text-4xl text-center">HomePage PLaceholder Text</h1>
     </main>
   );
