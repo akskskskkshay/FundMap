@@ -12,7 +12,7 @@ const Navbar = () => {
   return (
     <header className="w-full bg-amber-100 flex items-center justify-around ">
     <Link href={"/"}>
-        <Image className="ml-4"
+        <Image
         src="/fundmap_logo.png" 
         alt="FundMap Logo"
         width={70}
@@ -20,8 +20,8 @@ const Navbar = () => {
     </Link>
       
       <nav className="flex gap-6 items-center">
-        <Link href={"/dashboard"} className={clsx("text-lg text-gray-800", inter.className)}>Dashboard</Link>
-        <Link href={"/login"} className={clsx("text-lg text-gray-800", inter.className)}>SignUp</Link>
+        <Link href={"/dashboard"} className={clsx("text-md text-gray-800", inter.className)}>Dashboard</Link>
+        <Link href={"/login"} className={clsx("text-md text-gray-800", inter.className)}>Signup</Link>
       </nav>
     </header>
   )
