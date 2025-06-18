@@ -2,8 +2,9 @@
 
 import { Anton } from 'next/font/google';
 import { supabase } from '@/lib/supabaseClient';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { clsx } from 'clsx';
+import { useRouter } from "next/navigation"
 
 
 
@@ -22,6 +23,19 @@ export default function Login() {
     const [pwdMis, setPwdMis] = useState(false) 
 
     const inputRef = useRef<HTMLInputElement>(null)
+    const router = useRouter();
+
+    //handle redirecting once logged in
+    useEffect(()=>{
+        const {data} = supabase.auth.onAuthStateChange((event, session) => {
+            if (event==="SIGNED_IN"){
+                console.log("Log In Successful!")
+                router.replace("/dashboard")
+            }
+        })
+
+        return() => data.subscription.unsubscribe()
+    }, [])
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -72,10 +86,6 @@ export default function Login() {
                 setPwdMis(true)
             }
         }
-
-        
-        
-        
     }
     
 
