@@ -4,7 +4,7 @@
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import type { User } from "@supabase/supabase-js"
+import type { User } from "@supabase/supabase-js";
 
 
 const Dashboard = () => {
@@ -27,16 +27,26 @@ const Dashboard = () => {
             }
 
         }
-        
         getSession();
+}, [router]);
 
-    }, [router]);
+    useEffect(()=>{
+            const {data} = supabase.auth.onAuthStateChange((event, session) => {
+                console.log(event)
+                if(event === "SIGNED_OUT"){
+                    router.replace("/login")
+                }
+            })
 
+            return() => {data.subscription.unsubscribe()}
+        }, [])
+
+    
 
 
   return (
-    <main className="bg-amber-50 h-screen">
-      <h1>Dashboard</h1>
+    <main className="bg-amber-50 h-screen p-5">
+      <h1 className="text-3xl"><span className="font-black">Dashboard</span>, Welcome {user?.email}</h1>
     </main>
   )
 }
