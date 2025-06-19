@@ -66,7 +66,7 @@ const Navbar = () => {
       
       <nav className="flex gap-6 items-center">
         <Link href={"/dashboard"} className={clsx("text-md text-gray-800", inter.className)}>Dashboard</Link>
-        {isLogged ? <button onClick={handleSignout} className={clsx("text-md text-black bg-amber-400 p-2 rounded-full border cursor-pointer", inter.className)}>Sign Out</button> :
+        {isLogged ? <button onClick={handleSignout} className={clsx("text-md text-black bg-amber-400 p-2 rounded-full border cursor-pointer w-30", inter.className)}>Sign Out</button> :
         <button onClick={()=> {router.push("/login")}} className={clsx("text-md text-black bg-amber-400 p-2 rounded-full border cursor-pointer", inter.className)}>Sign In</button>}
         
       </nav>
