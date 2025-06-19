@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import type { User } from "@supabase/supabase-js";
-import { DashboardCard } from "@/components";
+import { DashboardCard, ExpenseModal } from "@/components";
 
 
 
@@ -13,10 +13,10 @@ const Dashboard = () => {
     const [user, setUser] = useState<User | null>(null);
     const [expenses, setExpenses] = useState<Array<any> | null>([]);
     const [fetchedData, setFetchedData] = useState(false);
-    const [showModal, setShowModal] = useState(true);
+    const [showModal, setShowModal] = useState(false);
 
     const [expenseTitle, setExpenseTitle] = useState("");
-    const [expenseAmount, setExpenseAmount] = useState<number>();
+    const [expenseAmount, setExpenseAmount] = useState<number | string>();
     const [expenseCategory, setExpenseCategory] = useState("");
     const [expenseDate, setExpenseDate] = useState<any>();
 
@@ -72,6 +72,44 @@ const Dashboard = () => {
         }, [])
 
     
+    
+    const handleAddExpense = async (e: React.FormEvent) => {
+        e.preventDefault()
+
+
+        const { error } = await supabase.from("expenses").insert([
+            {
+                title: expenseTitle,
+                amount: parseFloat(String(expenseAmount)),
+                category: expenseCategory,
+                date: expenseDate,
+                user_id: user?.id,
+            }
+        ])
+
+        if(error) {
+            console.log("Theres been an error logging your expenses, Try Again!", error)
+        }
+        else{
+            setExpenseAmount('')
+            setExpenseTitle('')
+            setExpenseCategory('')
+            setExpenseDate('')
+
+            setShowModal(false)
+        }
+
+
+        const { data, error: fetchError } = await supabase
+        .from('expenses')
+        .select('*')
+        .order('date', { ascending: false })
+
+        if (!fetchError) {
+        setExpenses(data)
+        }
+    }
+    
 
     if (!user) return (
         <div className="bg-amber-50 h-screen flex justify-center items-center">
@@ -85,7 +123,14 @@ const Dashboard = () => {
         <main className="bg-amber-50 h-screen p-5">
         <h1 className="text-3xl text-amber-900"><span className="font-black text-amber-900">Dashboard</span>, Welcome {user?.email}</h1>
         {!fetchedData ? <h1 className="mt-4">Fetching your Data...</h1> : (expenses?.length === 0 && <h1 className="mt-4">No Records Found Yet!</h1>)}
+        <div className="flex justify-end">
+            <button 
+            onClick={() => setShowModal(true)}
+            className="border border-black p-3 bg-amber-400 rounded-xl font-bold text-amber-900 cursor-pointer hover:bg-amber-300 transition duration-200"> 
+                + Add Expense
+            </button>
 
+        </div>
         {/* data cards */}
         <section className="mt-5 flex flex-wrap gap-4 justify-center">
             <div className="flex-1 min-w-[220px] max-w-sm">
@@ -104,17 +149,9 @@ const Dashboard = () => {
         {/* data cards */}
 
         {showModal && 
-        (<div className="bg-black fixed opacity-70 z-50 inset-0 flex justify-center items-center">
-            <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md relative">
-                <button 
-                onClick={() => setShowModal(false)}
-                className="absolute top-2 right-3 text-gray-400 hover:text-black text-xl bg-gray-100 border rounded-full p-2 cursor-pointer">
-                    &times;
-                </button>
-            
+        <ExpenseModal isOpen={showModal} onClose={() => setShowModal(false)}>
                 <h1 className="text-xl text-amber-800 font-bold">Add Expense</h1>
-
-                <form className="flex flex-wrap gap-3 mt-5">
+                <form onSubmit={handleAddExpense} className="flex flex-wrap gap-3 mt-5">
                     <input 
                     type="text" 
                     required
@@ -131,7 +168,6 @@ const Dashboard = () => {
                     onChange={(e) => setExpenseAmount(Number(e.currentTarget.value))}
                     className="border-2 border-black p-3 flex-1 rounded-xl focus:outline-amber-400"></input>
 
-
                     <input 
                     type="text" 
                     required
@@ -139,7 +175,6 @@ const Dashboard = () => {
                     value={expenseCategory}
                     onChange={(e) => setExpenseCategory(e.currentTarget.value)}
                     className="border-2 border-black p-3 flex-1 rounded-xl focus:outline-amber-400"></input>
-
 
                     <input 
                     type="date" 
@@ -149,12 +184,12 @@ const Dashboard = () => {
                     onChange={(e) => setExpenseDate(e.currentTarget.value)}
                     className="border-2 border-black p-3 flex-1 rounded-xl focus:outline-amber-400"></input>
 
-
-
-                    <button className="mt-3 border-2 p-2 rounded-br-2xl rounded-tl-2xl bg-amber-500 hover:bg-amber-600 cursor-pointer hover:text-white transition duration-200 text-lg border-black">Add Now</button>
+                    <button 
+                    className="mt-3 border-2 p-2 rounded-br-2xl rounded-tl-2xl bg-amber-400 hover:bg-amber-300 cursor-pointer hover:text-black transition duration-200 text-lg border-black ">
+                        Add Now
+                    </button>
                 </form>
-            </div>
-        </div>)}
+            </ExpenseModal>}
 
         </main>
     )
