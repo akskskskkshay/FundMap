@@ -1,3 +1,4 @@
-export type Expense = {
-    
+export type DashboardCardProps = {
+    title: string;
+    value: string | number;
 }
