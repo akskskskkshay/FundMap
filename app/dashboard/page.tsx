@@ -7,6 +7,7 @@ import { supabase } from "@/lib/supabaseClient";
 import type { User } from "@supabase/supabase-js";
 import { DashboardCard, ExpenseModal } from "@/components";
 import type { Expense } from "@/types";
+import { title } from "process";
 
 
 
@@ -16,10 +17,8 @@ const Dashboard = () => {
     const [fetchedData, setFetchedData] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
-    const [expenseTitle, setExpenseTitle] = useState("");
-    const [expenseAmount, setExpenseAmount] = useState<number | string>();
-    const [expenseCategory, setExpenseCategory] = useState("");
-    const [expenseDate, setExpenseDate] = useState<any>();
+
+    const [formData, setFormData] = useState({title: '', amount: '', category: '', date: ''})
 
     const [totalSpent, setTotalSpent] = useState<number | null>();
 
@@ -78,10 +77,10 @@ const Dashboard = () => {
 
         const { error } = await supabase.from("expenses").insert([
             {
-                title: expenseTitle,
-                amount: parseFloat(String(expenseAmount)),
-                category: expenseCategory,
-                date: expenseDate,
+                title: formData.title,
+                amount: parseFloat(String(formData.amount)),
+                category: formData.category,
+                date: formData.date,
                 user_id: user?.id,
             }
         ])
@@ -90,11 +89,13 @@ const Dashboard = () => {
             console.log("Theres been an error logging your expenses, Try Again!", error)
         }
         else{
-            setExpenseAmount('')
-            setExpenseTitle('')
-            setExpenseCategory('')
-            setExpenseDate('')
-
+            setFormData(
+                {
+                    title: '', 
+                    amount: '', 
+                    category: '', 
+                    date: ''
+                })
             setShowModal(false)
         }
 
@@ -109,6 +110,8 @@ const Dashboard = () => {
         }
     }
 
+
+    //compute stats
     useEffect(() => {
         if (expenses && expenses.length > 0) {
             console.log(expenses);
@@ -162,39 +165,51 @@ const Dashboard = () => {
         {/* data cards */}
 
         {showModal && 
-        <ExpenseModal isOpen={showModal} onClose={() => setShowModal(false)}>
+        <ExpenseModal isOpen={showModal} onClose={() => {setShowModal(false); setFormData({title: '', amount: '', category: '', date: ''})}}>
                 <h1 className="text-xl text-amber-800 font-bold">Add Expense</h1>
                 <form onSubmit={handleAddExpense} className="flex flex-wrap gap-3 mt-5">
                     <input 
                     type="text" 
                     required
                     placeholder="Title" 
-                    value={expenseTitle}
-                    onChange={(e) => setExpenseTitle(e.currentTarget.value)}
+                    value={formData.title}
+                    onChange={(e) => {
+                        const value = e.currentTarget.value;
+                        setFormData(prev => ({...prev, title: value}))}
+                    }
                     className="border-1 border-black p-3 flex-1 rounded-xl focus:outline-amber-400"></input>
 
                     <input 
                     type="number" 
                     required
                     placeholder="Amount" 
-                    value={expenseAmount}
-                    onChange={(e) => setExpenseAmount(Number(e.currentTarget.value))}
+                    value={formData.amount}
+                    onChange={(e) => {
+                        const value = e.currentTarget.value;
+                        setFormData(prev =>  ({...prev, amount: value}))}
+                    }
                     className="border-1 border-black p-3 flex-1 rounded-xl focus:outline-amber-400"></input>
 
                     <input 
                     type="text" 
                     required
                     placeholder="Category" 
-                    value={expenseCategory}
-                    onChange={(e) => setExpenseCategory(e.currentTarget.value)}
+                    value={formData.category}
+                    onChange={(e) => {
+                        const value = e.currentTarget.value;
+                        setFormData(prev => ({...prev, category: value}) )} 
+                    }
                     className="border-1 border-black p-3 flex-1 rounded-xl focus:outline-amber-400"></input>
 
                     <input 
                     type="date" 
                     required
                     placeholder="Date" 
-                    value={expenseDate}
-                    onChange={(e) => setExpenseDate(e.currentTarget.value)}
+                    value={formData.date}
+                    onChange={(e) => {
+                        const value = e.currentTarget.value;
+                        setFormData(prev => ({...prev, date: value}))}
+                    }
                     className="border-1 border-black p-3 flex-1 rounded-xl focus:outline-amber-400"></input>
 
                     <button 
