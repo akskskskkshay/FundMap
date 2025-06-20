@@ -6,8 +6,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import type { User } from "@supabase/supabase-js";
 import { DashboardCard, ExpenseModal } from "@/components";
-import type { Expense } from "@/types";
-import { title } from "process";
+import type { Expense, FormData } from "@/types";
 
 
 
@@ -18,7 +17,7 @@ const Dashboard = () => {
     const [showModal, setShowModal] = useState(false);
 
 
-    const [formData, setFormData] = useState({title: '', amount: '', category: '', date: ''})
+    const [formData, setFormData] = useState<FormData>({title: '', amount: '', category: '', date: ''})
 
     const [totalSpent, setTotalSpent] = useState<number | null>();
 
@@ -119,8 +118,6 @@ const Dashboard = () => {
             const amounts = expenses.map(expense => expense.amount);
             const total = amounts.reduce((acc, curr) => acc + curr, 0);
             setTotalSpent(total);
-            console.log("Calculated totalSpent:", total);
-            console.log(amounts);
         }
     }, [expenses])
     

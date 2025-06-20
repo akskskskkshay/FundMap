@@ -16,3 +16,10 @@ export type Expense = {
   date: string;
   user_id: string;
 };
+
+export type FormData = {
+    title: string,
+    amount: string,
+    category: string,
+    date: string
+}
