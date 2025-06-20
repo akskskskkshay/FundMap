@@ -6,12 +6,13 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import type { User } from "@supabase/supabase-js";
 import { DashboardCard, ExpenseModal } from "@/components";
+import type { Expense } from "@/types";
 
 
 
 const Dashboard = () => {
     const [user, setUser] = useState<User | null>(null);
-    const [expenses, setExpenses] = useState<Array<any> | null>([]);
+    const [expenses, setExpenses] = useState<Expense[]>([]);
     const [fetchedData, setFetchedData] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
@@ -20,7 +21,7 @@ const Dashboard = () => {
     const [expenseCategory, setExpenseCategory] = useState("");
     const [expenseDate, setExpenseDate] = useState<any>();
 
-    const [totalSpent, setTotalSpent] = useState(0);
+    const [totalSpent, setTotalSpent] = useState<number | null>();
 
     const router = useRouter();
 
@@ -47,9 +48,8 @@ const Dashboard = () => {
             setFetchedData(false)
             if(user){
                 const { data } = await supabase.from("expenses").select("*").order("date", { ascending: false });
-                setExpenses(data);
+                setExpenses(data ?? []);
                 setFetchedData(true)
-                console.log(data);
             } else {
                 console.log("No User Logged In!", user);
             }
@@ -75,7 +75,6 @@ const Dashboard = () => {
     
     const handleAddExpense = async (e: React.FormEvent) => {
         e.preventDefault()
-
 
         const { error } = await supabase.from("expenses").insert([
             {
@@ -109,6 +108,19 @@ const Dashboard = () => {
         setExpenses(data)
         }
     }
+
+    useEffect(() => {
+        if (expenses && expenses.length > 0) {
+            console.log(expenses);
+
+            const amounts = expenses.map(expense => expense.amount);
+            const total = amounts.reduce((acc, curr) => acc + curr, 0);
+            setTotalSpent(total);
+            console.log("Calculated totalSpent:", total);
+            console.log(amounts);
+        }
+    }, [expenses])
+    
     
 
     if (!user) return (
@@ -123,18 +135,19 @@ const Dashboard = () => {
         <main className="bg-amber-50 h-screen p-5">
         <h1 className="text-3xl text-amber-900"><span className="font-black text-amber-900">Dashboard</span>, Welcome {user?.email}</h1>
         {!fetchedData ? <h1 className="mt-4">Fetching your Data...</h1> : (expenses?.length === 0 && <h1 className="mt-4">No Records Found Yet!</h1>)}
+        
         <div className="flex justify-end">
             <button 
             onClick={() => setShowModal(true)}
             className="border border-black p-3 bg-amber-400 rounded-xl font-bold text-amber-900 cursor-pointer hover:bg-amber-300 transition duration-200"> 
                 + Add Expense
             </button>
-
         </div>
+
         {/* data cards */}
         <section className="mt-5 flex flex-wrap gap-4 justify-center">
             <div className="flex-1 min-w-[220px] max-w-sm">
-            <DashboardCard title="Total Spent" value={0}/>
+            <DashboardCard title="Total Spent" value={totalSpent ?? 0}/>
             </div>
             <div className="flex-1 min-w-[220px] max-w-sm">
             <DashboardCard title="Increased By" value={"5.3%"}/>
@@ -158,7 +171,7 @@ const Dashboard = () => {
                     placeholder="Title" 
                     value={expenseTitle}
                     onChange={(e) => setExpenseTitle(e.currentTarget.value)}
-                    className="border-2 border-black p-3 flex-1 rounded-xl focus:outline-amber-400"></input>
+                    className="border-1 border-black p-3 flex-1 rounded-xl focus:outline-amber-400"></input>
 
                     <input 
                     type="number" 
@@ -166,7 +179,7 @@ const Dashboard = () => {
                     placeholder="Amount" 
                     value={expenseAmount}
                     onChange={(e) => setExpenseAmount(Number(e.currentTarget.value))}
-                    className="border-2 border-black p-3 flex-1 rounded-xl focus:outline-amber-400"></input>
+                    className="border-1 border-black p-3 flex-1 rounded-xl focus:outline-amber-400"></input>
 
                     <input 
                     type="text" 
@@ -174,7 +187,7 @@ const Dashboard = () => {
                     placeholder="Category" 
                     value={expenseCategory}
                     onChange={(e) => setExpenseCategory(e.currentTarget.value)}
-                    className="border-2 border-black p-3 flex-1 rounded-xl focus:outline-amber-400"></input>
+                    className="border-1 border-black p-3 flex-1 rounded-xl focus:outline-amber-400"></input>
 
                     <input 
                     type="date" 
@@ -182,10 +195,10 @@ const Dashboard = () => {
                     placeholder="Date" 
                     value={expenseDate}
                     onChange={(e) => setExpenseDate(e.currentTarget.value)}
-                    className="border-2 border-black p-3 flex-1 rounded-xl focus:outline-amber-400"></input>
+                    className="border-1 border-black p-3 flex-1 rounded-xl focus:outline-amber-400"></input>
 
                     <button 
-                    className="mt-3 border-2 p-2 rounded-br-2xl rounded-tl-2xl bg-amber-400 hover:bg-amber-300 cursor-pointer hover:text-black transition duration-200 text-lg border-black ">
+                    className="mt-3 border-1 p-2 w-full rounded-xl bg-amber-400 hover:bg-amber-300 cursor-pointer hover:text-black transition duration-200 text-lg border-black ">
                         Add Now
                     </button>
                 </form>

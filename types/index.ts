@@ -8,3 +8,11 @@ export type ExpModal = {
     onClose: () => void;
     children: React.ReactNode
 }
+export type Expense = {
+  id: number;
+  title: string;
+  amount: number;
+  category: string;
+  date: string;
+  user_id: string;
+};
