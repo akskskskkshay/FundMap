@@ -7,6 +7,7 @@ import { supabase } from "@/lib/supabaseClient";
 import type { User } from "@supabase/supabase-js";
 import { DashboardCard, ExpenseModal, TopExpTable } from "@/components";
 import type { Expense, FormData } from "@/types";
+import CategPie from "@/components/CategPie";
 
 
 
@@ -140,10 +141,9 @@ const Dashboard = () => {
 
     return (
         <main className="bg-amber-50 h-screen p-5">
-        <h1 className="text-3xl text-amber-900"><span className="font-black text-amber-900">Dashboard</span>, Welcome {user?.email}</h1>
-        
-        
-        <div className="flex justify-end">
+        <h1 className="text-3xl text-amber-900 font-black">Dashboard</h1>
+        <div className="flex  justify-between items-center">
+            <p className="text-amber-900">Welcome Back, {user?.email}</p>
             <button 
             onClick={() => setShowModal(true)}
             className="border border-black p-3 bg-amber-400 rounded-xl font-bold text-amber-900 cursor-pointer hover:bg-amber-300 transition duration-200"> 
@@ -223,8 +223,10 @@ const Dashboard = () => {
                 </form>
             </ExpenseModal>}
 
-            <div>
-               {!fetchedData ? <h1 className="mt-4">Fetching your Data...</h1> : (expenses?.length === 0 ? <h1 className="mt-4">No Transactions Yet! Add your first transaction now!</h1> : <TopExpTable expense={expenses}/>)} 
+            <div className="flex mt-20 gap-20">
+               {!fetchedData ? <h1 className="mt-4">Fetching your Data...</h1> : (expenses?.length === 0 ? <h1 className="mt-4">No Transactions Yet! Add your first transaction now!</h1> : (<>
+                    <TopExpTable expense={expenses}/>
+                    <CategPie expense={expenses}/> </>))} 
                 
             </div>
 

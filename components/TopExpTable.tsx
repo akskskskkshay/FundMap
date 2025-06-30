@@ -21,7 +21,7 @@ const TopExpTable = ({expense}: TopExpTableProps) => {
   }, [expense])
 
   return (
-    <div className="relative overflow-x-auto mt-20">
+    <div className="relative overflow-x-auto flex-1">
     <table className="w-full text-sm text-left rtl:text-right text-amber-900 bg-amber-50">
         <thead className="text-xs text-amber-900 uppercase bg-amber-400">
             <tr>
