@@ -2,7 +2,7 @@
 
 
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import type { User } from "@supabase/supabase-js";
 import { DashboardCard, ExpenseModal, TopExpTable } from "@/components";
@@ -20,6 +20,7 @@ const Dashboard = () => {
     const [formData, setFormData] = useState<FormData>({title: '', amount: '', category: '', date: ''})
 
     const [totalSpent, setTotalSpent] = useState<number | null>();
+    const [totalInvestment, setTotalInvestment] = useState<number | null>()
 
     const router = useRouter();
 
@@ -118,6 +119,12 @@ const Dashboard = () => {
             const amounts = expenses.map(expense => expense.amount);
             const total = amounts.reduce((acc, curr) => acc + curr, 0);
             setTotalSpent(total);
+
+            const investmentTotal = expenses
+            .filter(exp => exp.category.toUpperCase() === "INVESTMENT")
+            .reduce((acc, exp) => acc + exp.amount, 0);
+            setTotalInvestment(investmentTotal);
+
         }
     }, [expenses])
     
@@ -153,7 +160,7 @@ const Dashboard = () => {
             <DashboardCard title="Increased By" value={"5.3%"}/>
             </div>
             <div className="flex-1 min-w-[220px] max-w-sm">
-            <DashboardCard title="Total Investments" value={0}/>
+            <DashboardCard title="Total Investments" value={totalInvestment ?? 0}/>
             </div>
             <div className="flex-1 min-w-[220px] max-w-sm">
             <DashboardCard title="Balance" value={0}/>
