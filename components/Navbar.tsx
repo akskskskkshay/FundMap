@@ -55,19 +55,21 @@ const Navbar = () => {
 
 
   return (
-    <header className="w-full bg-amber-100 flex items-center justify-around ">
-    <Link href={"/"}>
+    <header className="w-full bg-white/5 backdrop-blur border-b border-white/10 border-r text-white flex items-center justify-between px-8 min-h-16">
+    {/* <Link href={"/"}>
         <Image
         src="/fundmap_logo.png" 
         alt="FundMap Logo"
         width={70}
         height={50}></Image>
-    </Link>
+    </Link> */}
+
+      <Link href={"/"}> <h1 className="text-3xl font-semibold text-purple-300 drop-shadow-[0_0_10px_#A855F7]">FundMap</h1></Link>
       
       <nav className="flex gap-6 items-center">
-        <Link href={"/dashboard"} className={clsx("text-md text-gray-800", inter.className)}>Dashboard</Link>
-        {isLogged ? <button onClick={handleSignout} className={clsx("text-md text-black bg-amber-400 hover:bg-amber-300 transition duration-200 p-2 rounded-full border cursor-pointer w-30", inter.className)}>Sign Out</button> :
-        <button onClick={()=> {router.push("/login")}} className={clsx("text-md text-black bg-amber-400 hover:bg-amber-300 transition duration-200 p-2 rounded-full border cursor-pointer", inter.className)}>Sign In</button>}
+        <Link href={"/dashboard"} className={clsx("text-md", inter.className)}>Dashboard</Link>
+        {isLogged ? <button onClick={handleSignout} className={clsx("bg-[#A855F7]/30 text-white backdrop-blur-md border border-purple-400/40 shadow-[0_0_10px_#A855F7] hover:shadow-[0_0_20px_#A855F7] transition-all p-2 font-bold cursor-pointer duration-200 rounded-full w-30", inter.className)}>Sign Out</button> :
+        <button onClick={()=> {router.push("/login")}} className={clsx("bg-[#A855F7]/30 text-white backdrop-blur-md border border-purple-400/40 shadow-[0_0_10px_#A855F7] hover:shadow-[0_0_20px_#A855F7] transition-all p-2 font-bold cursor-pointer duration-200 rounded-full w-30", inter.className)}>Sign In</button>}
         
       </nav>
     </header>

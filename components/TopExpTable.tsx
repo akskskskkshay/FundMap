@@ -21,36 +21,33 @@ const TopExpTable = ({expense}: TopExpTableProps) => {
   }, [expense])
 
   return (
-    <div className="relative overflow-x-auto flex-1">
-    <table className="w-full text-sm text-left rtl:text-right text-amber-900 bg-amber-50">
-        <thead className="text-xs text-amber-900 uppercase bg-amber-400">
-            <tr>
-                <th scope="col" className="px-6 py-3 rounded-tl-lg">Title</th>
-                <th scope="col" className="px-6 py-3">Category</th>
-                <th scope="col" className="px-6 py-3">Date</th>
-                <th scope='col' className='px-6 py-3 rounded-tr-lg'>Amount</th>
-            </tr>
-        </thead>
-        <tbody>
-            {expense.slice(0, 5).map(exp => (
-              <tr className="bg-amber-300" key={exp.id}>
-                <th scope="row" className="px-6 py-4 font-medium text-amber-900 whitespace-nowrap">{exp.title}</th>
-                <td className="px-6 py-4">{exp.category}</td>
-                <td className="px-6 py-4">{exp.date}</td>
-                <td className="px-6 py-4">{exp.amount}</td>
-            </tr>
-            ))}
-        </tbody>
-        <tfoot>
-            <tr className="font-semibold text-amber-900 dark:text-amber-900 bg-amber-400  ">
-                <th scope="row" className="px-6 py-3 text-base rounded-bl-lg">Total</th>
-                <td className="px-6 py-3"></td>
-                <td className="px-6 py-3"></td>
-                <td className="px-6 py-3 rounded-br-lg">{total}</td>
-            </tr>
-        </tfoot>
-    </table>
-</div>
+
+    <div className="max-w-4xl w-full mx-auto flex-1">
+      <h2 className="text-xl font-semibold mb-4 text-white">Your Top 5 Transactions</h2>
+        <div className=" bg-white/10 backdrop-blur-lg border border-white/10 rounded-2xl overflow-hidden shadow-lg">
+          <table className="min-w-full text-left text-sm text-white/80">
+              <thead className="bg-white/10 border-b border-white/10 uppercase">
+                  <tr>
+                      <th scope="col" className="px-6 py-4 font-medium text-purple-300">Title</th>
+                      <th scope="col" className="px-6 py-4 font-medium text-purple-300">Category</th>
+                      <th scope="col" className="px-6 py-4 font-medium text-purple-300">Date</th>
+                      <th scope='col' className='px-6 py-4 font-medium text-purple-300 text-right rounded-tr-lg'>Amount</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {expense.slice(0, 5).map(exp => (
+                    <tr className="hover:bg-white/5 transition" key={exp.id}>
+                      <th scope="row" className="px-6 py-4  font-medium whitespace-nowrap">{exp.title}</th>
+                      <td className="px-6 py-4">{exp.category}</td>
+                      <td className="px-6 py-4">{exp.date}</td>
+                      <td className="px-6 py-4 text-right text-white">{exp.amount}</td>
+                  </tr>
+                  ))}
+              </tbody>
+          </table>
+        </div>
+    </div>  
+    
   )
 }
 

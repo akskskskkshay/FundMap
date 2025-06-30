@@ -132,7 +132,7 @@ const Dashboard = () => {
     
 
     if (!user) return (
-        <div className="bg-amber-50 h-screen flex justify-center items-center">
+        <div className="h-screen flex justify-center items-center z-20">
             <h1 className="text-4xl font-bold">Loading...</h1>
         </div>
     )
@@ -140,24 +140,26 @@ const Dashboard = () => {
 
 
     return (
-        <main className="bg-amber-50 h-screen p-5">
-        <h1 className="text-3xl text-amber-900 font-black">Dashboard</h1>
+        <main className="text-white min-h-screen p-5">
+
+
+        <h1 className="text-3xl text-white font-black">Dashboard</h1>
         <div className="flex  justify-between items-center">
-            <p className="text-amber-900">Welcome Back, {user?.email}</p>
+            <p className="text-white">Welcome Back, {user?.email}</p>
             <button 
             onClick={() => setShowModal(true)}
-            className="border border-black p-3 bg-amber-400 rounded-xl font-bold text-amber-900 cursor-pointer hover:bg-amber-300 transition duration-200"> 
+            className="rounded-xl bg-[#A855F7]/30 text-white backdrop-blur-md border border-purple-400/40 shadow-[0_0_10px_#A855F7] hover:shadow-[0_0_20px_#A855F7] transition-all  p-3 font-bold cursor-pointer duration-200"> 
                 + Add Expense
-            </button>
+            </button>    
         </div>
 
         {/* data cards */}
         <section className="mt-5 flex flex-wrap gap-4 justify-center">
             <div className="flex-1 min-w-[220px] max-w-sm">
-            <DashboardCard title="Total Spent" value={totalSpent ?? 0}/>
+            <DashboardCard title="Total Spent (this month)" value={totalSpent ?? 0}/>
             </div>
             <div className="flex-1 min-w-[220px] max-w-sm">
-            <DashboardCard title="Increased By" value={"5.3%"}/>
+            <DashboardCard title="Increased By (last month)" value={"5.3%"}/>
             </div>
             <div className="flex-1 min-w-[220px] max-w-sm">
             <DashboardCard title="Total Investments" value={totalInvestment ?? 0}/>
