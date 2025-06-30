@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import type { User } from "@supabase/supabase-js";
-import { DashboardCard, ExpenseModal } from "@/components";
+import { DashboardCard, ExpenseModal, TopExpTable } from "@/components";
 import type { Expense, FormData } from "@/types";
 
 
@@ -134,7 +134,7 @@ const Dashboard = () => {
     return (
         <main className="bg-amber-50 h-screen p-5">
         <h1 className="text-3xl text-amber-900"><span className="font-black text-amber-900">Dashboard</span>, Welcome {user?.email}</h1>
-        {!fetchedData ? <h1 className="mt-4">Fetching your Data...</h1> : (expenses?.length === 0 && <h1 className="mt-4">No Records Found Yet!</h1>)}
+        
         
         <div className="flex justify-end">
             <button 
@@ -215,6 +215,11 @@ const Dashboard = () => {
                     </button>
                 </form>
             </ExpenseModal>}
+
+            <div>
+               {!fetchedData ? <h1 className="mt-4">Fetching your Data...</h1> : (expenses?.length === 0 ? <h1 className="mt-4">No Transactions Yet! Add your first transaction now!</h1> : <TopExpTable expense={expenses}/>)} 
+                
+            </div>
 
         </main>
     )
