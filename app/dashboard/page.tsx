@@ -115,7 +115,6 @@ const Dashboard = () => {
     //compute stats
     useEffect(() => {
         if (expenses && expenses.length > 0) {
-            console.log(expenses);
 
             const amounts = expenses.map(expense => expense.amount);
             const total = amounts.reduce((acc, curr) => acc + curr, 0);
@@ -133,7 +132,7 @@ const Dashboard = () => {
 
     if (!user) return (
         <div className="h-screen flex justify-center items-center z-20">
-            <h1 className="text-4xl font-bold">Loading...</h1>
+            <div className="loader"></div>
         </div>
     )
     

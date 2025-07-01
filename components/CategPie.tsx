@@ -21,8 +21,6 @@ export type CategPie = {
 
 const CategPie = ({expense}: CategPie) => {
 
-    console.log(expense)
-
     const groupedByCategory = expense.reduce((acc, expense) => {
     const category = expense.category || 'Uncategorized'
     const amount = expense.amount || 0
@@ -37,9 +35,6 @@ const CategPie = ({expense}: CategPie) => {
     name: key,
     value,
     }))
-
-
-console.log(pieData)
 
 
   return (

@@ -19,26 +19,29 @@ export default function Login() {
     const [pwdVerify, SetPwdVerify] = useState<string>("")
     const [isLogin, setIsLogin] = useState(true);
     const [isInvalidData, setIsInvalidData] = useState(false);
-    const [isTouched, setIsTouched] = useState({email: false, pwd: false})
+    const [isTouched, setIsTouched] = useState({email: false, pwd: false, repwd: false})
     const [pwdMis, setPwdMis] = useState(false) 
+    const [isLoading, setIsLoading] = useState(false)
 
     const inputRef = useRef<HTMLInputElement>(null)
     const router = useRouter();
 
     //handle redirecting once logged in
-    useEffect(()=>{
-        const {data} = supabase.auth.onAuthStateChange((event, session) => {
-            if (event==="SIGNED_IN"){
-                console.log("Log In Successful!")
-                router.replace("/dashboard")
-            }
-        })
+    // useEffect(()=>{
+    //     const {data} = supabase.auth.onAuthStateChange((event, session) => {
+    //         if (event==="SIGNED_IN"){
+    //             console.log("Log In Successful!")
+    //             router.replace("/dashboard")
+    //         }
+    //     })
 
-        return() => data.subscription.unsubscribe()
-    }, [])
+    //     return() => data.subscription.unsubscribe()
+    // }, [])
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        setIsInvalidData(false)
+        setIsLoading(true)
 
         let data, error
         if(isLogin) {
@@ -52,6 +55,7 @@ export default function Login() {
                 console.error("Error during authentication:", error.message);
                 if(error.message == "Invalid login credentials" || error.message == "missing email or phone"){
                     setIsInvalidData(true)
+                    setIsLoading(false)
                 }
                 else{
                     alert("Authentication failed: " + error.message);
@@ -59,10 +63,16 @@ export default function Login() {
                 return
             }
             else {
+                setTimeout(() => {
+                    router.push('/dashboard')
+                }, 200) 
+
                 setUserCreds({email: '', password: ''}); 
                 SetPwdVerify("");
                 setIsInvalidData(false)
+                setIsTouched({email: false, pwd: false, repwd: false})
                 setIsLogin(true)
+                setIsLoading(false)
                 console.log("Authenticated Successfully!", data)
             }    
         }
@@ -78,21 +88,23 @@ export default function Login() {
                 setIsLogin(true)
                 setUserCreds({email: '', password: ''}); 
                 SetPwdVerify("");
+                setIsLoading(false)
             }
             else{ 
                 setUserCreds(prev => ({...prev, password: ''}));
                 SetPwdVerify("");
                 inputRef.current?.focus()
                 setPwdMis(true)
+                setIsLoading(false)
             }
         }
     }
     
 
   return (
-    <div className="flex items-center justify-center h-screen bg-amber-50">
-      <div className='w-full max-w-md p-6 bg-white rounded-lg shadow-2xl'>
-        <h1 className={clsx("text-2xl font-bold text-gray-600 text-center mb-3", anton.className)}>{isLogin ? 'Login' : "SignUp"} To FundMap</h1>
+    <div className="flex items-center justify-center h-screen">
+      <div className='w-full max-w-md p-6 rounded-2xl shadow-2xl bg-white/10 backdrop-blur-lg border border-white/10'>
+        <h1 className={clsx("text-2xl font-bold text-white text-center mb-3", anton.className)}>{isLogin ? 'Login' : "Sign Up"} To <span className='text-3xl font-semibold text-purple-300 drop-shadow-[0_0_10px_#A855F7]'>FundMap</span></h1>
         {isInvalidData && (<p className='text-center mb-3 text-red-500'>Invalid Username Or Password, Try Again!</p>)}
         {pwdMis && (<p className='text-center mb-3 text-red-500'>Password doesn't match. Try Again!</p>)}
         <form onSubmit={handleLogin}>
@@ -103,7 +115,7 @@ export default function Login() {
             placeholder="Email"
             onChange={(e) => setUserCreds({...userCreds, email: e.target.value.trim()})}
             value={userCreds.email}
-            className={`w-full p-3 mb-4 border border-gray-300 rounded text-black focus:outline-amber-400 ${isTouched.email && 'invalid:border-pink-600'} `}
+            className={`w-full p-3 mb-4 border border-white rounded text-white focus:outline-purple-300 ${isTouched.email && 'invalid:border-pink-600'} `}
         />
         <input
             type="password"
@@ -113,28 +125,31 @@ export default function Login() {
             placeholder="Password"
             onChange={(e) => setUserCreds({...userCreds, password: e.target.value})}
             value={userCreds.password}
-            className={`w-full p-3 mb-4 border border-gray-300 rounded text-black focus:outline-amber-400 ${isTouched.pwd && 'invalid:border-pink-600'}` }
+            className={`w-full p-3 mb-4 border border-white rounded text-white focus:outline-purple-300 ${isTouched.pwd && 'invalid:border-pink-600'}` }
         />
         { !isLogin &&
         <input
             type="password"
-            onBlur={()=> {setIsTouched(prev => ({...prev, pwd: true}))}}
+            onBlur={()=> {setIsTouched(prev => ({...prev, repwd: true}))}}
             required
             placeholder="Re-Enter Password"
             onChange={(e) => SetPwdVerify(e.target.value)}
             value={pwdVerify}
-            className={`w-full p-3 mb-4 border border-gray-300 rounded text-black focus:outline-amber-400 ${isTouched.pwd && 'invalid:border-pink-600'}` }
+            className={`w-full p-3 mb-4 border border-white rounded text-white focus:outline-purple-300 ${isTouched.repwd && 'invalid:border-pink-600'}` }
         />
         }
 
         
-        <button className=' text-gray-800 bg-amber-400 p-3 rounded-full w-100 hover:bg-amber-300 hover:text-amber-800 transition duration-200 font-bold cursor-pointer'>{isLogin ? "Login" : "SignUp"}</button>
+        <button className='rounded-xl w-full bg-[#A855F7]/30 text-white backdrop-blur-md border border-purple-400/40 shadow-[0_0_10px_#A855F7] hover:shadow-[0_0_20px_#A855F7] transition-all p-3 font-bold cursor-pointer duration-200 flex items-center justify-center gap-2'>
+            {isLogin ? "Login" : "SignUp"} 
+            {isLoading && <div className='loader_btn'></div>}
+        </button>
         </form>
         
         {isLogin ? (
-          <p className='text-center mt-4 text-gray-600 cursor-default'>Don't have an account? <button className='cursor-pointer'><a onClick={() => {setIsLogin(false); setUserCreds({email: '', password: ''}); setIsTouched({email: false, pwd: false}); setIsInvalidData(false)}} className='text-amber-500 hover:underline'>Sign Up</a></button></p>
+          <p className='text-center mt-4 text-white cursor-default'>Don't have an account? <button className='cursor-pointer'><a onClick={() => {setIsLogin(false); setUserCreds({email: '', password: ''}); setIsTouched({email: false, pwd: false, repwd: false}); setIsInvalidData(false)}} className='text-purple-300 hover:underline'>Sign Up</a></button></p>
         ) : (
-          <p className='text-center mt-4 text-gray-600 cursor-default'>Already have an account? <button className='cursor-pointer'><a onClick={() => {setIsLogin(true); setUserCreds({email: '', password: ''}); setIsTouched({email: false, pwd: false}); setIsInvalidData(false)}} className='text-amber-500 hover:underline'>Login</a></button></p>
+          <p className='text-center mt-4 text-white cursor-default'>Already have an account? <button className='cursor-pointer'><a onClick={() => {setIsLogin(true); setUserCreds({email: '', password: ''}); setIsTouched({email: false, pwd: false, repwd: false}); setIsInvalidData(false)}} className='text-purple-300 hover:underline'>Login</a></button></p>
         )}
       </div>
     </div>

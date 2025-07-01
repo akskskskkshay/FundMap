@@ -64,7 +64,7 @@ const Navbar = () => {
         height={50}></Image>
     </Link> */}
 
-      <Link href={"/"}> <h1 className="text-3xl font-semibold text-purple-300 drop-shadow-[0_0_10px_#A855F7]">FundMap</h1></Link>
+      <Link href={"/"}> <h1 className="text-3xl font-semibold text-purple-300 drop-shadow-[0_0_10px_#A855F7]">[FM]</h1></Link>
       
       <nav className="flex gap-6 items-center">
         <Link href={"/dashboard"} className={clsx("text-md", inter.className)}>Dashboard</Link>
