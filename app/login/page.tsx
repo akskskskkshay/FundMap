@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { useState, useRef, useEffect } from 'react';
 import { clsx } from 'clsx';
 import { useRouter } from "next/navigation"
+import { Eye, EyeOff } from "lucide-react"
 
 
 
@@ -22,6 +23,7 @@ export default function Login() {
     const [isTouched, setIsTouched] = useState({email: false, pwd: false, repwd: false})
     const [pwdMis, setPwdMis] = useState(false) 
     const [isLoading, setIsLoading] = useState(false)
+    const [showPwd, setShowPwd] = useState(false)
 
     const inputRef = useRef<HTMLInputElement>(null)
     const router = useRouter();
@@ -117,8 +119,9 @@ export default function Login() {
             value={userCreds.email}
             className={`w-full p-3 mb-4 border border-white rounded text-white focus:outline-purple-300 ${isTouched.email && 'invalid:border-pink-600'} `}
         />
-        <input
-            type="password"
+        <div className='relative w-full'>
+            <input
+            type={showPwd ? "text" : "password"}
             ref={inputRef}
             onBlur={()=> {setIsTouched(prev => ({...prev, pwd: true}))}}
             required
@@ -127,6 +130,15 @@ export default function Login() {
             value={userCreds.password}
             className={`w-full p-3 mb-4 border border-white rounded text-white focus:outline-purple-300 ${isTouched.pwd && 'invalid:border-pink-600'}` }
         />
+        <button 
+            type='button'
+            onClick={() => {
+                setShowPwd(prev => !prev)
+            }}
+            className='absolute right-3 top-1/2 translate-y-[-80%] text-gray-500 hover:text-white transition duration-300 cursor-pointer'
+        >{showPwd ? <Eye size={21}/> : <EyeOff size={21} />}</button>
+        </div>
+        
         { !isLogin &&
         <input
             type="password"
