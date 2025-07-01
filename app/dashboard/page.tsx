@@ -171,7 +171,7 @@ const Dashboard = () => {
 
         {showModal && 
         <ExpenseModal isOpen={showModal} onClose={() => {setShowModal(false); setFormData({title: '', amount: '', category: '', date: ''})}}>
-                <h1 className="text-xl text-amber-800 font-bold">Add Expense</h1>
+                <h1 className="text-xl text-purple-300 font-bold">Add Expense</h1>
                 <form onSubmit={handleAddExpense} className="flex flex-wrap gap-3 mt-5">
                     <input 
                     type="text" 
@@ -182,7 +182,7 @@ const Dashboard = () => {
                         const value = e.currentTarget.value;
                         setFormData(prev => ({...prev, title: value}))}
                     }
-                    className="border-1 border-black p-3 flex-1 rounded-xl focus:outline-amber-400"></input>
+                    className="border-1 border-grey-300 p-3 flex-1 rounded-xl focus:outline-purple-300"></input>
 
                     <input 
                     type="number" 
@@ -193,7 +193,7 @@ const Dashboard = () => {
                         const value = e.currentTarget.value;
                         setFormData(prev =>  ({...prev, amount: value}))}
                     }
-                    className="border-1 border-black p-3 flex-1 rounded-xl focus:outline-amber-400"></input>
+                    className="border-1 border-grey-300 p-3 flex-1 rounded-xl focus:outline-purple-300"></input>
 
                     <input 
                     type="text" 
@@ -204,7 +204,7 @@ const Dashboard = () => {
                         const value = e.currentTarget.value;
                         setFormData(prev => ({...prev, category: value}) )} 
                     }
-                    className="border-1 border-black p-3 flex-1 rounded-xl focus:outline-amber-400"></input>
+                    className="border-1 border-grey-300 p-3 flex-1 rounded-xl focus:outline-purple-300"></input>
 
                     <input 
                     type="date" 
@@ -215,10 +215,10 @@ const Dashboard = () => {
                         const value = e.currentTarget.value;
                         setFormData(prev => ({...prev, date: value}))}
                     }
-                    className="border-1 border-black p-3 flex-1 rounded-xl focus:outline-amber-400"></input>
+                    className="border-1 border-grey-300 p-3 flex-1 rounded-xl focus:outline-purple-300"></input>
 
                     <button 
-                    className="mt-3 border-1 p-2 w-full rounded-xl bg-amber-400 hover:bg-amber-300 cursor-pointer hover:text-black transition duration-200 text-lg border-black ">
+                    className="bg-[#A855F7]/30 text-white backdrop-blur-md border border-purple-400/40 shadow-[0_0_10px_#A855F7] hover:shadow-[0_0_20px_#A855F7] transition-all p-2 font-semibold cursor-pointer duration-200 mt-3 w-full rounded-xl text-lg ">
                         Add Now
                     </button>
                 </form>
