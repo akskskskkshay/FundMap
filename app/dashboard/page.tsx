@@ -8,6 +8,7 @@ import type { User } from "@supabase/supabase-js";
 import { DashboardCard, ExpenseModal, TopExpTable } from "@/components";
 import type { Expense, FormData } from "@/types";
 import CategPie from "@/components/CategPie";
+import { categorizeFromClient } from "@/actions/categorizeExpenseAction";
 
 
 
@@ -16,9 +17,9 @@ const Dashboard = () => {
     const [expenses, setExpenses] = useState<Expense[]>([]);
     const [fetchedData, setFetchedData] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
 
-
-    const [formData, setFormData] = useState<FormData>({title: '', amount: '', category: '', date: ''})
+    const [formData, setFormData] = useState<FormData>({title: '', amount: '', date: ''})
 
     const [totalSpent, setTotalSpent] = useState<number | null>();
     const [totalInvestment, setTotalInvestment] = useState<number | null>()
@@ -76,16 +77,21 @@ const Dashboard = () => {
     const handleAddExpense = async (e: React.FormEvent) => {
         e.preventDefault()
 
+        setIsLoading(true)
+
+        const result = await categorizeFromClient(formData.title)
+        console.log(result)
+
         const { error } = await supabase.from("expenses").insert([
             {
                 title: formData.title,
                 amount: parseFloat(String(formData.amount)),
-                category: formData.category,
+                category: result,
                 date: formData.date,
                 user_id: user?.id,
             }
         ])
-
+        setIsLoading(false)
         if(error) {
             console.log("Theres been an error logging your expenses, Try Again!", error)
         }
@@ -94,7 +100,6 @@ const Dashboard = () => {
                 {
                     title: '', 
                     amount: '', 
-                    category: '', 
                     date: ''
                 })
             setShowModal(false)
@@ -170,32 +175,45 @@ const Dashboard = () => {
         {/* data cards */}
 
         {showModal && 
-        <ExpenseModal isOpen={showModal} onClose={() => {setShowModal(false); setFormData({title: '', amount: '', category: '', date: ''})}}>
+        <ExpenseModal isOpen={showModal} onClose={() => {setShowModal(false); setFormData({title: '', amount: '', date: ''})}}>
                 <h1 className="text-xl text-purple-300 font-bold">Add Expense</h1>
-                <form onSubmit={handleAddExpense} className="flex flex-wrap gap-3 mt-5">
+                <form onSubmit={handleAddExpense} className="flex flex-col flex-wrap gap-3 mt-5">
                     <input 
                     type="text" 
                     required
-                    placeholder="Title" 
+                    placeholder="What did you spent money of this time?" 
                     value={formData.title}
                     onChange={(e) => {
                         const value = e.currentTarget.value;
                         setFormData(prev => ({...prev, title: value}))}
                     }
                     className="border-1 border-grey-300 p-3 flex-1 rounded-xl focus:outline-purple-300"></input>
+                    <div className="flex gap-3">
+                        <input 
+                        type="number" 
+                        required
+                        placeholder="Amount" 
+                        value={formData.amount}
+                        onChange={(e) => {
+                            const value = e.currentTarget.value;
+                            setFormData(prev =>  ({...prev, amount: value}))}
+                        }
+                        className="border-1 border-grey-300 p-3 flex-1 rounded-xl focus:outline-purple-300"></input>
 
-                    <input 
-                    type="number" 
-                    required
-                    placeholder="Amount" 
-                    value={formData.amount}
-                    onChange={(e) => {
-                        const value = e.currentTarget.value;
-                        setFormData(prev =>  ({...prev, amount: value}))}
-                    }
-                    className="border-1 border-grey-300 p-3 flex-1 rounded-xl focus:outline-purple-300"></input>
+                        <input 
+                        type="date" 
+                        required
+                        placeholder="Date" 
+                        value={formData.date}
+                        onChange={(e) => {
+                            const value = e.currentTarget.value;
+                            setFormData(prev => ({...prev, date: value}))}
+                        }
+                        className="border-1 border-grey-300 p-3 flex-1 rounded-xl focus:outline-purple-300"></input>
+                    </div>
+                   
 
-                    <input 
+                    {/* <input 
                     type="text" 
                     required
                     placeholder="Category" 
@@ -204,22 +222,14 @@ const Dashboard = () => {
                         const value = e.currentTarget.value;
                         setFormData(prev => ({...prev, category: value}) )} 
                     }
-                    className="border-1 border-grey-300 p-3 flex-1 rounded-xl focus:outline-purple-300"></input>
+                    className="border-1 border-grey-300 p-3 flex-1 rounded-xl focus:outline-purple-300"></input> */}
 
-                    <input 
-                    type="date" 
-                    required
-                    placeholder="Date" 
-                    value={formData.date}
-                    onChange={(e) => {
-                        const value = e.currentTarget.value;
-                        setFormData(prev => ({...prev, date: value}))}
-                    }
-                    className="border-1 border-grey-300 p-3 flex-1 rounded-xl focus:outline-purple-300"></input>
+                    
 
                     <button 
-                    className="bg-[#A855F7]/30 text-white backdrop-blur-md border border-purple-400/40 shadow-[0_0_10px_#A855F7] hover:shadow-[0_0_20px_#A855F7] transition-all p-2 font-semibold cursor-pointer duration-200 mt-3 w-full rounded-xl text-lg ">
+                    className="bg-[#A855F7]/30 text-white backdrop-blur-md border border-purple-400/40 shadow-[0_0_10px_#A855F7] hover:shadow-[0_0_20px_#A855F7] transition-all p-2 font-semibold cursor-pointer duration-200 mt-3 w-full rounded-xl text-lg flex items-center justify-center gap-2">
                         Add Now
+                        {isLoading && <div className='loader_btn'></div>}
                     </button>
                 </form>
             </ExpenseModal>}

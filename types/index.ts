@@ -20,6 +20,5 @@ export type Expense = {
 export type FormData = {
     title: string,
     amount: string,
-    category: string,
     date: string
 }
