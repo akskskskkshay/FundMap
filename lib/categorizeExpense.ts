@@ -35,7 +35,7 @@ export async function categorizeExpense(description: string): Promise<string> {
         {
           role: 'system',
           content:
-            'You are an assistant that categorizes user expenses into one of the following categories: Food, Transport, Shopping, Bills, Entertainment, Health, Travel, Subscriptions, Luxury, or Other.',
+            'You are an assistant that categorizes user expenses into one of the following categories: Food, Transport, Shopping, Bills, Entertainment, Health, Travel, Subscriptions, Luxury, Investment or Other.',
         },
         {
           role: 'user',

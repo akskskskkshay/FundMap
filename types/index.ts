@@ -1,6 +1,7 @@
 export type DashboardCardProps = {
-    title: string;
-    value: string | number;
+    title: React.ReactNode;
+    value: React.ReactNode;
+    increase?: boolean;
 }
 
 export type ExpModal = {

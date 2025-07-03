@@ -9,7 +9,7 @@ import { DashboardCard, ExpenseModal, TopExpTable } from "@/components";
 import type { Expense, FormData } from "@/types";
 import CategPie from "@/components/CategPie";
 import { categorizeFromClient } from "@/actions/categorizeExpenseAction";
-
+import { IndianRupee } from "lucide-react";
 
 
 const Dashboard = () => {
@@ -19,10 +19,15 @@ const Dashboard = () => {
     const [showModal, setShowModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false)
 
-    const [formData, setFormData] = useState<FormData>({title: '', amount: '', date: ''})
+    const [formData, setFormData] = useState<FormData>({
+        title: '', 
+        amount: '', 
+        date: new Date().toISOString().split('T')[0]
+    })
 
     const [totalSpent, setTotalSpent] = useState<number | null>();
     const [totalInvestment, setTotalInvestment] = useState<number | null>()
+    const [increase, setIncrease] = useState({percentage: '', amount: 0, incr: false})
 
     const router = useRouter();
 
@@ -82,9 +87,11 @@ const Dashboard = () => {
         const result = await categorizeFromClient(formData.title)
         console.log(result)
 
+        const title = formData.title.charAt(0).toUpperCase() + formData.title.slice(1)
+
         const { error } = await supabase.from("expenses").insert([
             {
-                title: formData.title,
+                title: title,
                 amount: parseFloat(String(formData.amount)),
                 category: result,
                 date: formData.date,
@@ -130,6 +137,43 @@ const Dashboard = () => {
             .reduce((acc, exp) => acc + exp.amount, 0);
             setTotalInvestment(investmentTotal);
 
+
+
+        const now = new Date();
+
+        const thisMonthExpenses = expenses.filter(exp => {
+        const d = new Date(exp.date);
+        return (
+            d.getFullYear() === now.getFullYear() &&
+            d.getMonth() === now.getMonth()
+        );
+        });
+
+        const lastMonthExpenses = expenses.filter(exp => {
+        const d = new Date(exp.date);
+        const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        return (
+            d.getFullYear() === lastMonth.getFullYear() &&
+            d.getMonth() === lastMonth.getMonth()
+        );
+        });
+
+        const thisMonthTotal = thisMonthExpenses.reduce((sum, e) => sum + e.amount, 0);
+        const lastMonthTotal = lastMonthExpenses.reduce((sum, e) => sum + e.amount, 0);
+
+        const increase = Math.abs(thisMonthTotal - lastMonthTotal);
+        const percentage = (lastMonthTotal === 0 ? 100 : (increase / lastMonthTotal) * 100).toFixed(1);
+
+        
+
+        if(thisMonthTotal > lastMonthTotal){
+            setIncrease({percentage: percentage, amount: increase, incr: true})
+        }
+        else{
+            setIncrease({percentage: percentage, amount: increase, incr: false})
+        }
+
+
         }
     }, [expenses])
     
@@ -160,22 +204,43 @@ const Dashboard = () => {
         {/* data cards */}
         <section className="mt-5 flex flex-wrap gap-4 justify-center">
             <div className="flex-1 min-w-[220px] max-w-sm">
-            <DashboardCard title="Total Spent (this month)" value={totalSpent ?? 0}/>
+            <DashboardCard 
+                title="Total Spent (this month)" 
+                value={
+                    <>
+                        <span className="inline-block ml-2 align-middle">
+                            <IndianRupee size={25}  />
+                        </span>
+                        {totalSpent?.toLocaleString('en-IN') ?? 0}
+                    </>
+                } 
+            />
             </div>
             <div className="flex-1 min-w-[220px] max-w-sm">
-            <DashboardCard title="Increased By (last month)" value={"5.3%"}/>
+            <DashboardCard title={
+                <>
+                {`${increase.incr ? "Increased" : "Decreased"} By `} 
+                <span className="inline-block ml-2 align-middle">
+                            <IndianRupee size={18} strokeWidth={2} />
+                        </span>
+                {increase.amount.toLocaleString('en-IN')}
+
+                </>
+                
+                
+                } value={`${increase.percentage}%`} increase={increase.incr} />
             </div>
             <div className="flex-1 min-w-[220px] max-w-sm">
-            <DashboardCard title="Total Investments" value={totalInvestment ?? 0}/>
+            <DashboardCard title="Total Investments" value={totalInvestment ?? 0} />
             </div>
             <div className="flex-1 min-w-[220px] max-w-sm">
-            <DashboardCard title="Balance" value={0}/>
+            <DashboardCard title="Budgeting" value={"Good"} />
             </div>
         </section>
         {/* data cards */}
 
         {showModal && 
-        <ExpenseModal isOpen={showModal} onClose={() => {setShowModal(false); setFormData({title: '', amount: '', date: ''})}}>
+        <ExpenseModal isOpen={showModal} onClose={() => {setShowModal(false); setFormData(prev => ({...prev, title: '', amount: ''}))}}>
                 <h1 className="text-xl text-purple-300 font-bold">Add Expense</h1>
                 <form onSubmit={handleAddExpense} className="flex flex-col flex-wrap gap-3 mt-5">
                     <input 
