@@ -191,18 +191,18 @@ const Dashboard = () => {
         <main className="text-white min-h-screen p-5">
 
 
-        <h1 className="text-3xl text-white font-black">Dashboard</h1>
+        <h1 className="text-3xl text-purple-300 font-black">Dashboard</h1>
         <div className="flex  justify-between items-center">
-            <p className="text-white">Welcome Back, {user?.email}</p>
+            <p className="text-white font-black">Welcome Back, <span className="text-purple-300 text-lg">{user?.email}</span></p>
             <button 
             onClick={() => setShowModal(true)}
-            className="rounded-xl bg-[#A855F7]/30 text-white backdrop-blur-md border border-purple-400/40 shadow-[0_0_10px_#A855F7] hover:shadow-[0_0_20px_#A855F7] transition-all  p-3 font-bold cursor-pointer duration-200"> 
+            className="rounded-xl bg-[#A855F7]/30 text-purple-300 backdrop-blur-md border border-purple-400/40 shadow-[0_0_10px_#A855F7] hover:shadow-[0_0_20px_#A855F7] transition-all  p-3 font-bold cursor-pointer duration-200"> 
                 + Add Expense
             </button>    
         </div>
 
         {/* data cards */}
-        <section className="mt-5 flex flex-wrap gap-4 justify-center">
+        {expenses.length > 0 && <section className="mt-5 flex flex-wrap gap-4 justify-center">
             <div className="flex-1 min-w-[220px] max-w-sm">
             <DashboardCard 
                 title="Total Spent (this month)" 
@@ -248,7 +248,7 @@ const Dashboard = () => {
             <div className="flex-1 min-w-[220px] max-w-sm">
             <DashboardCard title="Budgeting" value={"Good"} />
             </div>
-        </section>
+        </section>}
         {/* data cards */}
 
         {showModal && 
@@ -312,7 +312,7 @@ const Dashboard = () => {
             </ExpenseModal>}
 
             <div className="flex mt-20 gap-20">
-               {!fetchedData ? <h1 className="mt-4">Fetching your Data...</h1> : (expenses?.length === 0 ? <h1 className="mt-4">No Transactions Yet! Add your first transaction now!</h1> : (<>
+               {!fetchedData ? <div className="loader"></div> : (expenses?.length === 0 ? <h1 className="font-bold text-purple-300">No Transactions Yet! Add your first transaction now!</h1> : (<>
                     <TopExpTable expense={expenses}/>
                     <CategPie expense={expenses}/> </>))} 
                 
