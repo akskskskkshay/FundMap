@@ -231,8 +231,20 @@ const Dashboard = () => {
                 } value={`${increase.percentage}%`} increase={increase.incr} />
             </div>
             <div className="flex-1 min-w-[220px] max-w-sm">
-            <DashboardCard title="Total Investments" value={totalInvestment ?? 0} />
+
+            <DashboardCard 
+            title="Total Investments" 
+            value={
+                <>
+                    <span className="inline-block ml-2 align-middle">
+                        <IndianRupee size={25}  />
+                    </span>   
+                    {totalInvestment ?? 0}
+                </>
+                }/>
             </div>
+
+
             <div className="flex-1 min-w-[220px] max-w-sm">
             <DashboardCard title="Budgeting" value={"Good"} />
             </div>
