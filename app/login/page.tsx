@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from 'react';
 import { clsx } from 'clsx';
 import { useRouter } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
+import { capitalize } from '@/utils/capitalize';
 
 
 
@@ -16,16 +17,17 @@ const anton = Anton({
 })
 
 export default function Login() {
-    const [userCreds, setUserCreds] = useState({email: '', password: ''});
+    const [userCreds, setUserCreds] = useState({fullName: '', email: '', password: ''});
     const [pwdVerify, SetPwdVerify] = useState<string>("")
     const [isLogin, setIsLogin] = useState(true);
     const [isInvalidData, setIsInvalidData] = useState(false);
-    const [isTouched, setIsTouched] = useState({email: false, pwd: false, repwd: false})
-    const [pwdMis, setPwdMis] = useState(false) 
-    const [isLoading, setIsLoading] = useState(false)
-    const [showPwd, setShowPwd] = useState(false)
+    const [isTouched, setIsTouched] = useState({name: false, email: false, pwd: false, repwd: false})
+    const [pwdMis, setPwdMis] = useState(false); 
+    const [isLoading, setIsLoading] = useState(false);
+    const [isNotConfirmed, setIsNotConfirmed] = useState(false);
+    const [showPwd, setShowPwd] = useState(false);
 
-    const inputRef = useRef<HTMLInputElement>(null)
+    const inputRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
 
     //handle redirecting once logged in
@@ -42,6 +44,7 @@ export default function Login() {
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        setIsNotConfirmed(false)
         setIsInvalidData(false)
         setIsLoading(true)
 
@@ -59,8 +62,14 @@ export default function Login() {
                     setIsInvalidData(true)
                     setIsLoading(false)
                 }
+                else if(error.message.toLowerCase() === "email not confirmed"){
+                    setIsNotConfirmed(true)
+                    setIsLoading(false)
+                }
+
                 else{
                     alert("Authentication failed: " + error.message);
+                    setIsLoading(false)
                 }
                 return
             }
@@ -69,10 +78,11 @@ export default function Login() {
                     router.push('/dashboard')
                 }, 200) 
 
-                setUserCreds({email: '', password: ''}); 
+                setUserCreds({fullName: '', email: '', password: ''}); 
                 SetPwdVerify("");
                 setIsInvalidData(false)
-                setIsTouched({email: false, pwd: false, repwd: false})
+                setIsNotConfirmed(false)
+                setIsTouched({name: false, email: false, pwd: false, repwd: false})
                 setIsLogin(true)
                 setIsLoading(false)
                 console.log("Authenticated Successfully!", data)
@@ -84,11 +94,16 @@ export default function Login() {
                 setPwdMis(false)
                 await supabase.auth.signUp({
                             email: userCreds.email,
-                            password: userCreds.password
+                            password: userCreds.password,
+                            options: {
+                                data: {
+                                    displayName: capitalize(userCreds.fullName)
+                                }
+                            }
                         });
                 console.log("User Successfully Created!")
                 setIsLogin(true)
-                setUserCreds({email: '', password: ''}); 
+                setUserCreds({fullName: '', email: '', password: ''}); 
                 SetPwdVerify("");
                 setIsLoading(false)
             }
@@ -108,8 +123,20 @@ export default function Login() {
       <div className='w-full max-w-md p-6 rounded-2xl shadow-2xl bg-white/10 backdrop-blur-lg border border-white/10'>
         <h1 className={clsx("text-2xl font-bold text-white text-center mb-3", anton.className)}>{isLogin ? 'Login' : "Sign Up"} To <span className='text-3xl font-semibold text-purple-300 drop-shadow-[0_0_10px_#A855F7]'>FundMap</span></h1>
         {isInvalidData && (<p className='text-center mb-3 text-red-500'>Invalid Username Or Password, Try Again!</p>)}
+        {isNotConfirmed && (<p className='text-center mb-3 text-green-500'>Email Not Confirmed.. Check your Mail!</p>)}
         {pwdMis && (<p className='text-center mb-3 text-red-500'>Password doesn't match. Try Again!</p>)}
         <form onSubmit={handleLogin}>
+            { !isLogin &&
+            <input
+                type="text"
+                onBlur={()=> {setIsTouched(prev => ({...prev, name: true}))}}
+                required
+                placeholder="Full Name"
+                onChange={(e) => setUserCreds(prev => ({...prev, fullName: e.target.value}))}
+                value={userCreds.fullName}
+                className={`w-full p-3 mb-4 border border-white rounded text-white focus:outline-purple-300 ${isTouched.repwd && 'invalid:border-pink-600'}` }
+            />
+            }
             <input
             onBlur={()=> {setIsTouched(prev => ({...prev, email: true}))}}
             type="email"   
@@ -159,9 +186,9 @@ export default function Login() {
         </form>
         
         {isLogin ? (
-          <p className='text-center mt-4 text-white cursor-default'>Don't have an account? <button className='cursor-pointer'><a onClick={() => {setIsLogin(false); setUserCreds({email: '', password: ''}); setIsTouched({email: false, pwd: false, repwd: false}); setIsInvalidData(false)}} className='text-purple-300 hover:underline'>Sign Up</a></button></p>
+          <p className='text-center mt-4 text-white cursor-default'>Don't have an account? <button className='cursor-pointer'><a onClick={() => {setIsLogin(false); setUserCreds({fullName: '', email: '', password: ''}); setIsTouched({name: false, email: false, pwd: false, repwd: false}); setIsInvalidData(false)}} className='text-purple-300 hover:underline'>Sign Up</a></button></p>
         ) : (
-          <p className='text-center mt-4 text-white cursor-default'>Already have an account? <button className='cursor-pointer'><a onClick={() => {setIsLogin(true); setUserCreds({email: '', password: ''}); setIsTouched({email: false, pwd: false, repwd: false}); setIsInvalidData(false)}} className='text-purple-300 hover:underline'>Login</a></button></p>
+          <p className='text-center mt-4 text-white cursor-default'>Already have an account? <button className='cursor-pointer'><a onClick={() => {setIsLogin(true); setUserCreds({fullName: '', email: '', password: ''}); setIsTouched({name: false, email: false, pwd: false, repwd: false}); setIsInvalidData(false)}} className='text-purple-300 hover:underline'>Login</a></button></p>
         )}
       </div>
     </div>

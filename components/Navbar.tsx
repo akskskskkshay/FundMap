@@ -19,6 +19,7 @@ const Navbar = () => {
     const router = useRouter()
 
     const [isLogged, setIsLogged] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         const {data} = supabase.auth.onAuthStateChange((event, session) => {
@@ -47,8 +48,10 @@ const Navbar = () => {
 }, [])
 
      const handleSignout = async () => {
+        setLoading(true)
         const error = await supabase.auth.signOut();
         setIsLogged(false)
+        setLoading(false)
         console.log(error)
     }
 
@@ -68,8 +71,8 @@ const Navbar = () => {
       
       <nav className="flex gap-6 items-center">
         <Link href={"/dashboard"} className={clsx("text-md hover:text-white text-purple-300 transition duration-300", inter.className)}>Dashboard</Link>
-        {isLogged ? <button onClick={handleSignout} className={clsx("bg-[#A855F7]/30 text-purple-300 backdrop-blur-md border border-purple-400/40 shadow-[0_0_10px_#A855F7] hover:shadow-[0_0_20px_#A855F7] transition-all p-2 font-bold cursor-pointer duration-200 rounded-full w-30", inter.className)}>Sign Out</button> :
-        <button onClick={()=> {router.push("/login")}} className={clsx("bg-[#A855F7]/30 text-purple-300 backdrop-blur-md border border-purple-400/40 shadow-[0_0_10px_#A855F7] hover:shadow-[0_0_20px_#A855F7] transition-all p-2 font-bold cursor-pointer duration-200 rounded-full w-30", inter.className)}>Sign In</button>}
+        {isLogged ? <button onClick={handleSignout} className={clsx("bg-[#A855F7]/30 text-purple-300 backdrop-blur-md border border-purple-400/40 shadow-[0_0_10px_#A855F7] hover:shadow-[0_0_20px_#A855F7] transition-all p-2 font-bold cursor-pointer duration-200 rounded-full w-30", inter.className)}>Sign Out {loading && <div className='loader_btn'></div>}</button> :
+        <button onClick={()=> {router.push("/login")}} className={clsx("bg-[#A855F7]/30 text-purple-300 backdrop-blur-md border border-purple-400/40 shadow-[0_0_10px_#A855F7] hover:shadow-[0_0_20px_#A855F7] transition-all p-2 font-bold cursor-pointer duration-200 rounded-full w-30", inter.className)}>Sign In {loading && <div className='loader_btn'></div>}</button>}
         
       </nav>
     </header>

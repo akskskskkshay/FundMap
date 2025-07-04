@@ -10,6 +10,7 @@ import type { Expense, FormData } from "@/types";
 import CategPie from "@/components/CategPie";
 import { categorizeFromClient } from "@/actions/categorizeExpenseAction";
 import { IndianRupee } from "lucide-react";
+import { capitalize } from "@/utils/capitalize";
 
 
 const Dashboard = () => {
@@ -17,7 +18,9 @@ const Dashboard = () => {
     const [expenses, setExpenses] = useState<Expense[]>([]);
     const [fetchedData, setFetchedData] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
+    const [userName, setUserName] = useState<string>()
+
 
     const [formData, setFormData] = useState<FormData>({
         title: '', 
@@ -43,6 +46,7 @@ const Dashboard = () => {
             }
             else{
                 setUser(session.user)
+                setUserName(capitalize(session.user?.user_metadata.displayName))
             }
         }
         getSession();
@@ -87,7 +91,7 @@ const Dashboard = () => {
         const result = await categorizeFromClient(formData.title)
         console.log(result)
 
-        const title = formData.title.charAt(0).toUpperCase() + formData.title.slice(1)
+        const title = capitalize(formData.title);
 
         const { error } = await supabase.from("expenses").insert([
             {
@@ -193,7 +197,7 @@ const Dashboard = () => {
 
         <h1 className="text-3xl text-purple-300 font-black">Dashboard</h1>
         <div className="flex  justify-between items-center">
-            <p className="text-white font-black">Welcome Back, <span className="text-purple-300 text-lg">{user?.email}</span></p>
+            <p className="text-white font-black">Welcome Back, <span className="text-purple-300 text-lg">{userName || user?.email}</span></p>
             <button 
             onClick={() => setShowModal(true)}
             className="rounded-xl bg-[#A855F7]/30 text-purple-300 backdrop-blur-md border border-purple-400/40 shadow-[0_0_10px_#A855F7] hover:shadow-[0_0_20px_#A855F7] transition-all  p-3 font-bold cursor-pointer duration-200"> 
