@@ -40,7 +40,7 @@ const TopExpTable = ({expense}: TopExpTableProps) => {
                       <th scope="row" className="px-6 py-4  font-medium whitespace-nowrap">{exp.title}</th>
                       <td className="px-6 py-4">{exp.category}</td>
                       <td className="px-6 py-4">{exp.date}</td>
-                      <td className="px-6 py-4 text-right text-white">{exp.amount}</td>
+                      <td className="px-6 py-4 text-right text-white">{exp.amount.toLocaleString('en-IN')}</td>
                   </tr>
                   ))}
               </tbody>

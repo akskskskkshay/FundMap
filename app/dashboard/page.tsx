@@ -2,7 +2,7 @@
 
 
 import { useRouter } from "next/navigation"
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import type { User } from "@supabase/supabase-js";
 import { DashboardCard, ExpenseModal, TopExpTable } from "@/components";
@@ -180,7 +180,6 @@ const Dashboard = () => {
 
         }
     }, [expenses])
-    
     
 
     if (!user) return (
