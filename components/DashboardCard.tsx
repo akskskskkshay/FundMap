@@ -1,6 +1,6 @@
 import React from 'react'
 import type { DashboardCardProps } from '@/types'
-import { MoveUp, ArrowDown, ArrowUp } from 'lucide-react'
+import {ArrowDown, ArrowUp } from 'lucide-react'
 
 
 const DashboardCard = ({title, value, increase} : DashboardCardProps) => {

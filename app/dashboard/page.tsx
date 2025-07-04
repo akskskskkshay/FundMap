@@ -46,7 +46,7 @@ const Dashboard = () => {
             }
             else{
                 setUser(session.user)
-                setUserName(capitalize(session.user?.user_metadata.displayName))
+                setUserName(session.user?.user_metadata?.displayName && capitalize(session.user?.user_metadata?.displayName))
             }
         }
         getSession();
