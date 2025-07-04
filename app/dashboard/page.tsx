@@ -11,6 +11,7 @@ import CategPie from "@/components/CategPie";
 import { categorizeFromClient } from "@/actions/categorizeExpenseAction";
 import { IndianRupee } from "lucide-react";
 import { capitalize } from "@/utils/capitalize";
+import DashboardTabs from '@/components/DashboardTabs';
 
 
 const Dashboard = () => {
@@ -199,7 +200,7 @@ const Dashboard = () => {
             <p className="text-white font-black">Welcome Back, <span className="text-purple-300 text-lg">{userName || user?.email}</span></p>
             <button 
             onClick={() => setShowModal(true)}
-            className="rounded-xl bg-[#A855F7]/30 text-purple-300 backdrop-blur-md border border-purple-400/40 shadow-[0_0_10px_#A855F7] hover:shadow-[0_0_20px_#A855F7] transition-all  p-3 font-bold cursor-pointer duration-200"> 
+            className="rounded-xl  bg-[#A855F7]/30 text-purple-300 backdrop-blur-md border border-purple-400/40 shadow-[0_0_10px_#A855F7] hover:shadow-[0_0_20px_#A855F7] transition-all  md:p-3 p-2 font-bold cursor-pointer duration-200"> 
                 + Add Expense
             </button>    
         </div>
@@ -314,11 +315,10 @@ const Dashboard = () => {
                 </form>
             </ExpenseModal>}
 
-            <div className="flex mt-20 gap-20">
-               {!fetchedData ? <div className="loader"></div> : (expenses?.length === 0 ? <h1 className="font-bold text-purple-300">No Transactions Yet! Add your first transaction now!</h1> : (<>
-                    <TopExpTable expense={expenses}/>
-                    <CategPie expense={expenses}/> </>))} 
-                
+            <div className="flex mt-20 items-center w-full">
+               {!fetchedData ? <div className="loader"></div> : (expenses?.length === 0 ? <h1 className="font-bold text-purple-300">No Transactions Yet! Add your first transaction now!</h1> : (
+                <DashboardTabs expenses={expenses} />
+               ))} 
             </div>
 
         </main>

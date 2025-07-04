@@ -22,7 +22,7 @@ const TopExpTable = ({expense}: TopExpTableProps) => {
 
   return (
 
-    <div className="max-w-4xl w-full mx-auto flex-1">
+    <div className="w-full">
       <h2 className="text-xl font-semibold mb-4 text-white">Your Top 5 Transactions</h2>
         <div className=" bg-white/10 backdrop-blur-lg border border-white/10 rounded-2xl overflow-hidden shadow-lg">
           <table className="min-w-full text-left text-sm text-white/80">
