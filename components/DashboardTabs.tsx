@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import TopExpTable from './TopExpTable';
 import CategPie from './CategPie';
+import Budgeting from './Budgeting';
+import BudgetBarChart from './BudgetBarChart';
 import type { Expense } from '@/types';
+import { User } from '@supabase/supabase-js';
 
 interface DashboardTabsProps {
   expenses: Expense[];
+  user: User | null;
 }
 
 const tabs = [
@@ -12,7 +16,7 @@ const tabs = [
   { label: 'Budgeting', value: 'budgeting' },
 ];
 
-export default function DashboardTabs({ expenses }: DashboardTabsProps) {
+export default function DashboardTabs({ expenses, user }: DashboardTabsProps) {
   const [activeTab, setActiveTab] = useState('overview');
 
   return (
@@ -43,7 +47,7 @@ export default function DashboardTabs({ expenses }: DashboardTabsProps) {
           </div>
         )}
         {activeTab === 'budgeting' && (
-          <div className="text-purple-300 font-bold text-xl">Budgeting features coming soon!</div>
+          <Budgeting expenses={expenses} user={user} />
         )}
       </div>
     </div>

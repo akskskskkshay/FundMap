@@ -38,8 +38,9 @@ const CategPie = ({expense}: CategPie) => {
 
 
   return (
-      <div className="w-full">
-        {/* <h2 className="text-xl font-semibold mb-4 text-white text-right">Spending by Category</h2> */}
+    <div className='flex-1 w-full h-full'>
+      <div className="w-full h-full">
+        <h2 className="text-xl font-semibold mb-4 text-white text-right">Spending by Category</h2>
         <ResponsiveContainer width="100%" height={300}>
             <PieChart>
             <Pie
@@ -80,6 +81,8 @@ const CategPie = ({expense}: CategPie) => {
             </PieChart>
         </ResponsiveContainer>
         </div>
+
+    </div>
   )
 }
 

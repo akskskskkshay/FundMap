@@ -58,7 +58,7 @@ const Navbar = () => {
 
 
   return (
-    <header className="w-full bg-white/5 backdrop-blur border-b border-white/10 border-r text-white flex items-center justify-between px-8 min-h-16">
+    <header className="w-full bg-white/5 backdrop-blur border-b border-white/10 border-r text-white flex items-center justify-between px-8 min-h-16 relative">
     {/* <Link href={"/"}>
         <Image
         src="/fundmap_logo.png" 
@@ -69,8 +69,14 @@ const Navbar = () => {
 
       <Link href={"/"}> <h1 className="text-3xl font-semibold text-purple-300 drop-shadow-[0_0_10px_#A855F7]">[FM]</h1></Link>
       
+      {/* Centered Dashboard Link */}
+      {isLogged && (
+        <div className="absolute left-1/2 transform -translate-x-1/2">
+          <Link href={"/dashboard"} className={clsx("text-md hover:text-white text-purple-300 transition duration-300", inter.className)}>Dashboard</Link>
+        </div>
+      )}
+      
       <nav className="flex gap-6 items-center">
-        <Link href={"/dashboard"} className={clsx("text-md hover:text-white text-purple-300 transition duration-300", inter.className)}>Dashboard</Link>
         {isLogged ? <button onClick={handleSignout} className={clsx("bg-[#A855F7]/30 text-purple-300 backdrop-blur-md border border-purple-400/40 shadow-[0_0_10px_#A855F7] hover:shadow-[0_0_20px_#A855F7] transition-all p-2 font-bold cursor-pointer duration-200 rounded-full w-30 flex items-center justify-center gap-1", inter.className)}>Sign Out {loading && <div className='loader_btn'></div>}</button> :
         <button onClick={()=> {router.push("/login")}} className={clsx("bg-[#A855F7]/30 text-purple-300 backdrop-blur-md border border-purple-400/40 shadow-[0_0_10px_#A855F7] hover:shadow-[0_0_20px_#A855F7] transition-all p-2 font-bold cursor-pointer duration-200 rounded-full w-30", inter.className)}>Sign In {loading && <div className='loader_btn'></div>}</button>}
         

@@ -179,7 +179,7 @@ export default function Login() {
         }
 
         
-        <button className='rounded-xl w-full bg-[#A855F7]/30 text-white backdrop-blur-md border border-purple-400/40 shadow-[0_0_10px_#A855F7] hover:shadow-[0_0_20px_#A855F7] transition-all p-3 font-bold cursor-pointer duration-200 flex items-center justify-center gap-2'>
+        <button className='rounded-xl w-full bg-[#A855F7]/30 text-purple-300 backdrop-blur-md border border-purple-400/40 shadow-[0_0_10px_#A855F7] hover:shadow-[0_0_20px_#A855F7] transition-all p-3 font-bold cursor-pointer duration-200 flex items-center justify-center gap-2'>
             {isLogin ? "Login" : "SignUp"} 
             {isLoading && <div className='loader_btn'></div>}
         </button>

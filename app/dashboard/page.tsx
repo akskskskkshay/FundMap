@@ -317,7 +317,7 @@ const Dashboard = () => {
 
             <div className="flex mt-20 items-center w-full">
                {!fetchedData ? <div className="loader"></div> : (expenses?.length === 0 ? <h1 className="font-bold text-purple-300">No Transactions Yet! Add your first transaction now!</h1> : (
-                <DashboardTabs expenses={expenses} />
+                <DashboardTabs expenses={expenses} user={user} />
                ))} 
             </div>
 
