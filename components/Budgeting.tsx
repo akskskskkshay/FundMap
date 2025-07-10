@@ -41,13 +41,18 @@ export default function Budgeting({ expenses, user }: BudgetingProps) {
     Object.fromEntries(categories.map((cat) => [cat, DEFAULTS['month'].budget]))
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   // Fetch existing budgets from Supabase
   useEffect(() => {
     const fetchBudgets = async () => {
-      if (!user) return;
+      if (!user) {
+        setIsInitialLoading(false);
+        return;
+      }
       
       try {
+        setIsInitialLoading(true);
         const { data, error } = await supabase
           .from('budgets')
           .select('category, amount')
@@ -76,6 +81,8 @@ export default function Budgeting({ expenses, user }: BudgetingProps) {
         }
       } catch (error) {
         console.error('Error fetching budgets:', error);
+      } finally {
+        setIsInitialLoading(false);
       }
     };
 
@@ -157,10 +164,17 @@ export default function Budgeting({ expenses, user }: BudgetingProps) {
             onChange={(e) => {
               const newAmount = Number(e.target.value);
               setBudgets((prev) => ({ ...prev, [cat]: newAmount }));
+            }}
+            onMouseUp={(e) => {
+              const newAmount = Number(e.currentTarget.value);
+              updateBudget(cat, newAmount);
+            }}
+            onTouchEnd={(e) => {
+              const newAmount = Number(e.currentTarget.value);
               updateBudget(cat, newAmount);
             }}
             className="accent-purple-400 h-2 rounded-lg appearance-none cursor-pointer bg-white/20 w-full"
-            disabled={isLoading}
+            disabled={isInitialLoading}
           />
         </div>
         <span className="w-24 text-purple-300 font-bold text-lg text-right">₹{budgets[cat].toLocaleString('en-IN')}</span>
@@ -193,35 +207,44 @@ export default function Budgeting({ expenses, user }: BudgetingProps) {
 
   return (
     <div className="w-full bg-white/10 backdrop-blur-lg border border-white/10 rounded-2xl shadow-2xl p-8 flex flex-col gap-8">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-2">
-        <h2 className="text-2xl font-bold text-purple-300 text-center">Set Your Budgets</h2>
-        <div className="flex gap-2 justify-center sm:justify-end">
-          {PERIODS.map((p) => (
-            <button
-              key={p.value}
-              onClick={() => setPeriod(p.value as 'month' | 'year')}
-              className={`px-4 py-1.5 rounded-lg font-semibold border transition-all duration-200 cursor-pointer text-sm
-                ${period === p.value ? 'text-purple-400 border-purple-400 bg-white/10' : 'text-white border-white hover:text-purple-400 hover:border-purple-400'}`}
-            >
-              {p.label}
-            </button>
-          ))}
+      {isInitialLoading ? (
+        <div className="flex flex-col items-center justify-center py-12">
+          <div className="loader mb-4"></div>
+          <p className="text-white/70 text-lg">Loading your budgets...</p>
         </div>
-      </div>
-      <div className="flex flex-col md:flex-row gap-8 w-full">
-        <div className="flex-1 flex flex-col gap-6">
-          {leftCategories.map(renderSlider)}
-        </div>
-        <div className="flex-1 flex flex-col gap-6">
-          {rightCategories.map(renderSlider)}
-        </div>
-      </div>
-      <div className="mt-8">
-        <h3 className="text-lg font-bold text-purple-300 mb-4 text-center">Budget Usage Progress ({period === 'month' ? 'This Month' : 'This Year'})</h3>
-        <div className="flex flex-col gap-2 w-full">
-          {categories.map(renderProgressBar)}
-        </div>
-      </div>
+      ) : (
+        <>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-2">
+            <h2 className="text-2xl font-bold text-purple-300 text-center">Set Your Budgets</h2>
+            <div className="flex gap-2 justify-center sm:justify-end">
+              {PERIODS.map((p) => (
+                <button
+                  key={p.value}
+                  onClick={() => setPeriod(p.value as 'month' | 'year')}
+                  className={`px-4 py-1.5 rounded-lg font-semibold border transition-all duration-200 cursor-pointer text-sm
+                    ${period === p.value ? 'text-purple-400 border-purple-400 bg-white/10' : 'text-white border-white hover:text-purple-400 hover:border-purple-400'}`}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row gap-8 w-full">
+            <div className="flex-1 flex flex-col gap-6">
+              {leftCategories.map(renderSlider)}
+            </div>
+            <div className="flex-1 flex flex-col gap-6">
+              {rightCategories.map(renderSlider)}
+            </div>
+          </div>
+          <div className="mt-8">
+            <h3 className="text-lg font-bold text-purple-300 mb-4 text-center">Budget Usage Progress ({period === 'month' ? 'This Month' : 'This Year'})</h3>
+            <div className="flex flex-col gap-2 w-full">
+              {categories.map(renderProgressBar)}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 } 
