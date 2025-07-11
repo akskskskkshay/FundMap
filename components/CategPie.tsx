@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Expense } from "@/types";
 
 export type CategPieProps = {
@@ -123,6 +123,7 @@ function describeArc(cx: number, cy: number, r: number, start: number, end: numb
 const CategPie: React.FC<CategPieProps> = ({ expense }) => {
   const [hovered, setHovered] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  const hideTimeout = useRef<NodeJS.Timeout | null>(null);
   const pieData = getPieData(expense);
   const segments = getPieSegments(pieData);
   const total = pieData.reduce((sum, d) => sum + d.value, 0);
@@ -130,7 +131,20 @@ const CategPie: React.FC<CategPieProps> = ({ expense }) => {
 
   React.useEffect(() => {
     setMounted(true);
+    return () => {
+      if (hideTimeout.current) clearTimeout(hideTimeout.current);
+    };
   }, []);
+
+  // Handlers to prevent flicker
+  const handleEnter = (name: string) => {
+    if (hideTimeout.current) clearTimeout(hideTimeout.current);
+    setHovered(name);
+  };
+  const handleLeave = () => {
+    if (hideTimeout.current) clearTimeout(hideTimeout.current);
+    hideTimeout.current = setTimeout(() => setHovered(null), 100);
+  };
 
   return (
     <div className="w-full">
@@ -153,8 +167,8 @@ const CategPie: React.FC<CategPieProps> = ({ expense }) => {
                     filter: hovered === seg.name ? "drop-shadow(0 0 12px #a855f7cc)" : "none",
                     cursor: "pointer",
                   }}
-                  onMouseEnter={() => setHovered(seg.name)}
-                  onMouseLeave={() => setHovered(null)}
+                  onMouseEnter={() => handleEnter(seg.name)}
+                  onMouseLeave={handleLeave}
                 />
               ) : null
             )}
@@ -183,8 +197,8 @@ const CategPie: React.FC<CategPieProps> = ({ expense }) => {
                 <div
                   key={seg.name}
                   className={`flex items-center justify-between px-2 transition-all duration-200 rounded-lg ${hovered === seg.name ? 'bg-white/10 backdrop-blur' : ''}`}
-                  onMouseEnter={() => setHovered(seg.name)}
-                  onMouseLeave={() => setHovered(null)}
+                  onMouseEnter={() => handleEnter(seg.name)}
+                  onMouseLeave={handleLeave}
                   style={{ cursor: "pointer" }}
                 >
                   <div className="flex items-center gap-3">
