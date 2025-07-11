@@ -206,7 +206,7 @@ export default function Budgeting({ expenses, user }: BudgetingProps) {
   }
 
   return (
-    <div className="w-full bg-white/10 backdrop-blur-lg border border-white/10 rounded-2xl shadow-2xl p-8 flex flex-col gap-8">
+    <div className="w-full bg-white/10 backdrop-blur-lg border border-white/10 rounded-2xl shadow-2xl p-8 flex flex-col gap-8 py-8">
       {isInitialLoading ? (
         <div className="flex flex-col items-center justify-center py-12">
           <div className="loader mb-4"></div>
@@ -214,7 +214,7 @@ export default function Budgeting({ expenses, user }: BudgetingProps) {
         </div>
       ) : (
         <>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-2">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-2 w-full">
             <h2 className="text-2xl font-bold text-purple-300 text-center">Set Your Budgets</h2>
             <div className="flex gap-2 justify-center sm:justify-end">
               {PERIODS.map((p) => (
@@ -229,11 +229,11 @@ export default function Budgeting({ expenses, user }: BudgetingProps) {
               ))}
             </div>
           </div>
-          <div className="flex flex-col md:flex-row gap-8 w-full">
-            <div className="flex-1 flex flex-col gap-6">
+          <div className="flex flex-col md:flex-row gap-x-8 gap-y-8 w-full">
+            <div className="flex-1 w-full flex flex-col gap-6">
               {leftCategories.map(renderSlider)}
             </div>
-            <div className="flex-1 flex flex-col gap-6">
+            <div className="flex-1 w-full flex flex-col gap-6">
               {rightCategories.map(renderSlider)}
             </div>
           </div>
@@ -241,6 +241,15 @@ export default function Budgeting({ expenses, user }: BudgetingProps) {
             <h3 className="text-lg font-bold text-purple-300 mb-4 text-center">Budget Usage Progress ({period === 'month' ? 'This Month' : 'This Year'})</h3>
             <div className="flex flex-col gap-2 w-full">
               {categories.map(renderProgressBar)}
+            </div>
+          </div>
+          
+          <div className="mt-6 pt-6 border-t border-white/20">
+            <div className="flex justify-between items-center">
+              <span className="text-white/80 font-semibold">Total Budget ({period === 'month' ? 'Monthly' : 'Yearly'}):</span>
+              <span className="text-purple-300 font-bold text-xl">
+                ₹{Object.values(budgets).reduce((sum, amount) => sum + amount, 0).toLocaleString('en-IN')}
+              </span>
             </div>
           </div>
         </>

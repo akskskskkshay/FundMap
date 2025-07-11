@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import TopExpTable from './TopExpTable';
 import CategPie from './CategPie';
-import Budgeting from './Budgeting';
 import type { Expense } from '@/types';
+import Budgeting from './Budgeting';
+import EvaluationTab from './EvaluationTab';
 import { User } from '@supabase/supabase-js';
 
 interface DashboardTabsProps {
@@ -13,6 +14,7 @@ interface DashboardTabsProps {
 const tabs = [
   { label: 'Overview', value: 'overview' },
   { label: 'Budgeting', value: 'budgeting' },
+  { label: 'Evaluation', value: 'evaluation' },
 ];
 
 export default function DashboardTabs({ expenses, user }: DashboardTabsProps) {
@@ -20,7 +22,7 @@ export default function DashboardTabs({ expenses, user }: DashboardTabsProps) {
 
   return (
     <div className='w-full'>
-      <div className="flex gap-2 mb-6">
+      <div className="flex w-full gap-2 mb-6">
         {tabs.map((tab) => (
           <button
             key={tab.value}
@@ -34,7 +36,7 @@ export default function DashboardTabs({ expenses, user }: DashboardTabsProps) {
           </button>
         ))}
       </div>
-      <div>
+      <div className='w-full'> 
         {activeTab === 'overview' && (
           <div className="flex flex-col md:flex-row w-full gap-8 items-center">
             <div className="flex-1 min-w-0">
@@ -47,6 +49,9 @@ export default function DashboardTabs({ expenses, user }: DashboardTabsProps) {
         )}
         {activeTab === 'budgeting' && (
           <Budgeting expenses={expenses} user={user} />
+        )}
+        {activeTab === 'evaluation' && (
+          <EvaluationTab expenses={expenses} user={user} />
         )}
       </div>
     </div>
