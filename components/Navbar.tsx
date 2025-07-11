@@ -58,7 +58,7 @@ const Navbar = () => {
 
 
   return (
-    <header className="w-full bg-white/5 backdrop-blur border-b border-white/10 border-r text-white flex items-center justify-between px-8 min-h-16 relative">
+    <header className="w-full bg-gradient-to-r from-gray-900/90 via-purple-900/90 to-gray-900/90 backdrop-blur border-b border-white/10 text-white flex items-center justify-between px-8 min-h-16 relative">
     {/* <Link href={"/"}>
         <Image
         src="/fundmap_logo.png" 

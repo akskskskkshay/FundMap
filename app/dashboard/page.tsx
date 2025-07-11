@@ -230,7 +230,7 @@ const Dashboard = () => {
 
 
     return (
-        <main className="text-white min-h-screen p-5">
+        <main className="text-white min-h-screen p-5 bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
 
 
         <h1 className="text-3xl text-purple-300 font-black">Dashboard</h1>
