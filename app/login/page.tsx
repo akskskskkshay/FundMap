@@ -5,11 +5,9 @@ import { supabase } from '@/lib/supabaseClient';
 import { useState, useRef, useEffect } from 'react';
 import { clsx } from 'clsx';
 import { useRouter } from "next/navigation"
-import { Eye, EyeOff } from "lucide-react"
+import { Eye, EyeOff, ArrowLeft } from "lucide-react"
 import { capitalize } from '@/utils/capitalize';
-
-
-
+import Link from 'next/link';
 
 const anton = Anton({
     subsets: ['latin'],
@@ -30,18 +28,6 @@ export default function Login() {
     const inputRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
 
-    //handle redirecting once logged in
-    // useEffect(()=>{
-    //     const {data} = supabase.auth.onAuthStateChange((event, session) => {
-    //         if (event==="SIGNED_IN"){
-    //             console.log("Log In Successful!")
-    //             router.replace("/dashboard")
-    //         }
-    //     })
-
-    //     return() => data.subscription.unsubscribe()
-    // }, [])
-
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsNotConfirmed(false)
@@ -55,7 +41,6 @@ export default function Login() {
             password: userCreds.password
         }))
 
-
             if (error) {
                 console.error("Error during authentication:", error.message);
                 if(error.message == "Invalid login credentials" || error.message == "missing email or phone"){
@@ -66,7 +51,6 @@ export default function Login() {
                     setIsNotConfirmed(true)
                     setIsLoading(false)
                 }
-
                 else{
                     alert("Authentication failed: " + error.message);
                     setIsLoading(false)
@@ -88,7 +72,6 @@ export default function Login() {
                 console.log("Authenticated Successfully!", data)
             }    
         }
-
         else {
             if(userCreds.password === pwdVerify){
                 setPwdMis(false)
@@ -117,80 +100,155 @@ export default function Login() {
         }
     }
     
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 flex items-center justify-center px-4 relative">
+            {/* Background decoration */}
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent"></div>
+            
+            {/* Back to home button */}
+            <Link 
+                href="/"
+                className="absolute top-8 left-8 flex items-center gap-2 text-white/70 hover:text-purple-300 transition-colors duration-200 z-10"
+            >
+                <ArrowLeft size={20} />
+                <span>Back to Home</span>
+            </Link>
 
-  return (
-    <div className="flex items-center justify-center h-screen">
-      <div className='w-full max-w-md p-6 rounded-2xl shadow-2xl bg-white/10 backdrop-blur-lg border border-white/10'>
-        <h1 className={clsx("text-2xl font-bold text-white text-center mb-3", anton.className)}>{isLogin ? 'Login' : "Sign Up"} To <span className='text-3xl font-semibold text-purple-300 drop-shadow-[0_0_10px_#A855F7]'>FundMap</span></h1>
-        {isInvalidData && (<p className='text-center mb-3 text-red-500'>Invalid Username Or Password, Try Again!</p>)}
-        {isNotConfirmed && (<p className='text-center mb-3 text-green-500'>Email Not Confirmed.. Check your Mail!</p>)}
-        {pwdMis && (<p className='text-center mb-3 text-red-500'>Password doesn't match. Try Again!</p>)}
-        <form onSubmit={handleLogin}>
-            { !isLogin &&
-            <input
-                type="text"
-                onBlur={()=> {setIsTouched(prev => ({...prev, name: true}))}}
-                required
-                placeholder="Full Name"
-                onChange={(e) => setUserCreds(prev => ({...prev, fullName: e.target.value}))}
-                value={userCreds.fullName}
-                className={`w-full p-3 mb-4 border border-white rounded text-white focus:outline-purple-300 ${isTouched.repwd && 'invalid:border-pink-600'}` }
-            />
-            }
-            <input
-            onBlur={()=> {setIsTouched(prev => ({...prev, email: true}))}}
-            type="email"   
-            required
-            placeholder="Email"
-            onChange={(e) => setUserCreds({...userCreds, email: e.target.value.trim()})}
-            value={userCreds.email}
-            className={`w-full p-3 mb-4 border border-white rounded text-white focus:outline-purple-300 ${isTouched.email && 'invalid:border-pink-600'} `}
-        />
-        <div className='relative w-full'>
-            <input
-            type={showPwd ? "text" : "password"}
-            ref={inputRef}
-            onBlur={()=> {setIsTouched(prev => ({...prev, pwd: true}))}}
-            required
-            placeholder="Password"
-            onChange={(e) => setUserCreds({...userCreds, password: e.target.value})}
-            value={userCreds.password}
-            className={`w-full p-3 mb-4 border border-white rounded text-white focus:outline-purple-300 ${isTouched.pwd && 'invalid:border-pink-600'}` }
-        />
-        <button 
-            type='button'
-            onClick={() => {
-                setShowPwd(prev => !prev)
-            }}
-            className='absolute right-3 top-1/2 translate-y-[-80%] text-gray-500 hover:text-white transition duration-300 cursor-pointer'
-        >{showPwd ? <Eye size={21}/> : <EyeOff size={21} />}</button>
+            <div className='w-full max-w-md p-8 rounded-2xl shadow-2xl bg-white/10 backdrop-blur-lg border border-white/20 relative z-10'>
+                <div className="text-center mb-8">
+                    <h1 className={clsx("text-3xl font-bold text-white mb-2", anton.className)}>
+                        {isLogin ? 'Welcome Back' : "Join FundMap"}
+                    </h1>
+                    <p className="text-white/70 text-lg">
+                        {isLogin ? 'Sign in to continue your financial journey' : 'Create your account to get started'}
+                    </p>
+                    {/* <div className="mt-4">
+                        <span className='text-4xl font-semibold text-purple-300 drop-shadow-[0_0_20px_#A855F7]'>FundMap</span>
+                    </div> */}
+                </div>
+
+                {/* Error/Success Messages */}
+                {isInvalidData && (
+                    <div className='mb-6 p-4 rounded-xl bg-red-500/20 border border-red-400/40 text-red-300 text-center'>
+                        Invalid email or password. Please try again.
+                    </div>
+                )}
+                {isNotConfirmed && (
+                    <div className='mb-6 p-4 rounded-xl bg-green-500/20 border border-green-400/40 text-green-300 text-center'>
+                        Email not confirmed. Please check your inbox and verify your account.
+                    </div>
+                )}
+                {pwdMis && (
+                    <div className='mb-6 p-4 rounded-xl bg-red-500/20 border border-red-400/40 text-red-300 text-center'>
+                        Passwords don't match. Please try again.
+                    </div>
+                )}
+
+                <form onSubmit={handleLogin} className="space-y-6">
+                    {!isLogin && (
+                        <div>
+                            <input
+                                type="text"
+                                onBlur={()=> {setIsTouched(prev => ({...prev, name: true}))}}
+                                required
+                                placeholder="Full Name"
+                                onChange={(e) => setUserCreds(prev => ({...prev, fullName: e.target.value}))}
+                                value={userCreds.fullName}
+                                className="w-full p-4 border border-white/20 rounded-xl text-white bg-white/5 backdrop-blur-sm focus:outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 transition-all duration-200 placeholder-white/50"
+                            />
+                        </div>
+                    )}
+                    
+                    <div>
+                        <input
+                            onBlur={()=> {setIsTouched(prev => ({...prev, email: true}))}}
+                            type="email"   
+                            required
+                            placeholder="Email Address"
+                            onChange={(e) => setUserCreds({...userCreds, email: e.target.value.trim()})}
+                            value={userCreds.email}
+                            className="w-full p-4 border border-white/20 rounded-xl text-white bg-white/5 backdrop-blur-sm focus:outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 transition-all duration-200 placeholder-white/50"
+                        />
+                    </div>
+
+                    <div className='relative'>
+                        <input
+                            type={showPwd ? "text" : "password"}
+                            ref={inputRef}
+                            onBlur={()=> {setIsTouched(prev => ({...prev, pwd: true}))}}
+                            required
+                            placeholder="Password"
+                            onChange={(e) => setUserCreds({...userCreds, password: e.target.value})}
+                            value={userCreds.password}
+                            className="w-full p-4 pr-12 border border-white/20 rounded-xl text-white bg-white/5 backdrop-blur-sm focus:outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 transition-all duration-200 placeholder-white/50"
+                        />
+                        <button 
+                            type='button'
+                            onClick={() => setShowPwd(prev => !prev)}
+                            className='absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-purple-300 transition-colors duration-200'
+                        >
+                            {showPwd ? <Eye size={20}/> : <EyeOff size={20} />}
+                        </button>
+                    </div>
+                    
+                    {!isLogin && (
+                        <div>
+                            <input
+                                type="password"
+                                onBlur={()=> {setIsTouched(prev => ({...prev, repwd: true}))}}
+                                required
+                                placeholder="Confirm Password"
+                                onChange={(e) => SetPwdVerify(e.target.value)}
+                                value={pwdVerify}
+                                className="w-full p-4 border border-white/20 rounded-xl text-white bg-white/5 backdrop-blur-sm focus:outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 transition-all duration-200 placeholder-white/50"
+                            />
+                        </div>
+                    )}
+
+                    <button 
+                        type="submit"
+                        disabled={isLoading}
+                        className='w-full bg-gradient-to-r from-purple-600 via-purple-500 to-purple-600 bg-size-200 bg-pos-0 hover:bg-pos-100 text-white backdrop-blur-md border border-purple-400/40 shadow-[0_0_20px_#A855F7] hover:shadow-[0_0_30px_#A855F7] transition-all p-4 font-bold cursor-pointer duration-200 rounded-xl text-lg animate-gradient flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed'
+                    >
+                        {isLogin ? "Sign In" : "Create Account"}
+                        {isLoading && <div className='loader_btn'></div>}
+                    </button>
+                </form>
+                
+                <div className="mt-8 text-center">
+                    {isLogin ? (
+                        <p className='text-white/70'>
+                            Don't have an account?{' '}
+                            <button 
+                                onClick={() => {
+                                    setIsLogin(false); 
+                                    setUserCreds({fullName: '', email: '', password: ''}); 
+                                    setIsTouched({name: false, email: false, pwd: false, repwd: false}); 
+                                    setIsInvalidData(false)
+                                }} 
+                                className='text-purple-300 hover:text-purple-200 underline transition-colors duration-200'
+                            >
+                                Sign Up
+                            </button>
+                        </p>
+                    ) : (
+                        <p className='text-white/70'>
+                            Already have an account?{' '}
+                            <button 
+                                onClick={() => {
+                                    setIsLogin(true); 
+                                    setUserCreds({fullName: '', email: '', password: ''}); 
+                                    setIsTouched({name: false, email: false, pwd: false, repwd: false}); 
+                                    setIsInvalidData(false)
+                                }} 
+                                className='text-purple-300 hover:text-purple-200 underline transition-colors duration-200'
+                            >
+                                Sign In
+                            </button>
+                        </p>
+                    )}
+                </div>
+            </div>
         </div>
-        
-        { !isLogin &&
-        <input
-            type="password"
-            onBlur={()=> {setIsTouched(prev => ({...prev, repwd: true}))}}
-            required
-            placeholder="Re-Enter Password"
-            onChange={(e) => SetPwdVerify(e.target.value)}
-            value={pwdVerify}
-            className={`w-full p-3 mb-4 border border-white rounded text-white focus:outline-purple-300 ${isTouched.repwd && 'invalid:border-pink-600'}` }
-        />
-        }
-
-        
-        <button className='rounded-xl w-full bg-[#A855F7]/30 text-purple-300 backdrop-blur-md border border-purple-400/40 shadow-[0_0_10px_#A855F7] hover:shadow-[0_0_20px_#A855F7] transition-all p-3 font-bold cursor-pointer duration-200 flex items-center justify-center gap-2'>
-            {isLogin ? "Login" : "SignUp"} 
-            {isLoading && <div className='loader_btn'></div>}
-        </button>
-        </form>
-        
-        {isLogin ? (
-          <p className='text-center mt-4 text-white cursor-default'>Don't have an account? <button className='cursor-pointer'><a onClick={() => {setIsLogin(false); setUserCreds({fullName: '', email: '', password: ''}); setIsTouched({name: false, email: false, pwd: false, repwd: false}); setIsInvalidData(false)}} className='text-purple-300 hover:underline'>Sign Up</a></button></p>
-        ) : (
-          <p className='text-center mt-4 text-white cursor-default'>Already have an account? <button className='cursor-pointer'><a onClick={() => {setIsLogin(true); setUserCreds({fullName: '', email: '', password: ''}); setIsTouched({name: false, email: false, pwd: false, repwd: false}); setIsInvalidData(false)}} className='text-purple-300 hover:underline'>Login</a></button></p>
-        )}
-      </div>
-    </div>
-  );
+    );
 }
