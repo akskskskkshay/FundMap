@@ -1,5 +1,11 @@
 import Link from 'next/link';
 import { ArrowRight, PieChart, Target, TrendingUp, Shield } from 'lucide-react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Home | FundMap',
+  description: 'Smart budgeting, expense tracking, and AI-powered insights to help you achieve your financial goals.',
+}
 
 export default function Home() {
   return (
