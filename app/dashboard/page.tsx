@@ -11,6 +11,7 @@ import CategPie from "@/components/CategPie";
 import { categorizeFromClient } from "@/actions/categorizeExpenseAction";
 import { IndianRupee } from "lucide-react";
 import { capitalize } from "@/utils/capitalize";
+import { evaluateSpending } from "@/lib/evaluateSpending";
 import DashboardTabs from '@/components/DashboardTabs';
 
 
@@ -21,6 +22,8 @@ const Dashboard = () => {
     const [showModal, setShowModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [userName, setUserName] = useState<string>()
+    const [spendingEvaluation, setSpendingEvaluation] = useState<any>(null);
+    const [evaluatingSpending, setEvaluatingSpending] = useState(false);
 
 
     const [formData, setFormData] = useState<FormData>({
@@ -183,6 +186,41 @@ const Dashboard = () => {
     }, [expenses])
     
 
+    // Evaluate spending habits when expenses change
+    useEffect(() => {
+        const evaluateHabits = async () => {
+            if (expenses.length > 0) {
+                try {
+                    setEvaluatingSpending(true);
+                    // For now, use default budgets since we don't have access to user budgets here
+                    // In a real implementation, you'd fetch the user's budgets from the database
+                    const defaultBudgets = [
+                        { category: 'Food', amount: 50000 },
+                        { category: 'Transport', amount: 50000 },
+                        { category: 'Shopping', amount: 50000 },
+                        { category: 'Bills', amount: 50000 },
+                        { category: 'Entertainment', amount: 50000 },
+                        { category: 'Health', amount: 50000 },
+                        { category: 'Travel', amount: 50000 },
+                        { category: 'Subscriptions', amount: 50000 },
+                        { category: 'Luxury', amount: 50000 },
+                        { category: 'Investment', amount: 50000 }
+                    ];
+                    
+                    const evaluation = await evaluateSpending(expenses, defaultBudgets, 'month');
+                    setSpendingEvaluation(evaluation);
+                } catch (error) {
+                    console.error('Error evaluating spending:', error);
+                } finally {
+                    setEvaluatingSpending(false);
+                }
+            }
+        };
+
+        evaluateHabits();
+    }, [expenses]);
+
+    
     if (!user) return (
         <div className="h-screen flex justify-center items-center z-20">
             <div className="loader"></div>
@@ -250,7 +288,24 @@ const Dashboard = () => {
 
 
             <div className="flex-1 min-w-[220px] max-w-sm">
-            <DashboardCard title="Budgeting" value={"Good"} />
+            <DashboardCard title="Budgeting" value={
+                evaluatingSpending ? (
+                    <div className="flex items-center gap-2">
+                        <div className="loader_btn"></div>
+                        <span className="text-white/70">Evaluating...</span>
+                    </div>
+                ) : spendingEvaluation ? (
+                    <span className={`font-bold ${
+                        spendingEvaluation.assessment === 'excellent' ? 'text-green-400' :
+                        spendingEvaluation.assessment === 'good' ? 'text-blue-400' :
+                        spendingEvaluation.assessment === 'average' ? 'text-yellow-400' :
+                        spendingEvaluation.assessment === 'struggling' ? 'text-orange-400' :
+                        'text-red-400'
+                    }`}>
+                        {spendingEvaluation.assessment}
+                    </span>
+                ) : "No Data Yet!"
+            } />
             </div>
         </section>}
         {/* data cards */}

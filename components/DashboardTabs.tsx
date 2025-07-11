@@ -2,7 +2,6 @@ import { useState } from 'react';
 import TopExpTable from './TopExpTable';
 import CategPie from './CategPie';
 import Budgeting from './Budgeting';
-import BudgetBarChart from './BudgetBarChart';
 import type { Expense } from '@/types';
 import { User } from '@supabase/supabase-js';
 
