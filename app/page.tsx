@@ -88,6 +88,53 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Pricing Section */}
+      <section className="py-20 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl font-bold text-center text-white mb-16">
+            Simple, Transparent Pricing
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Free Plan */}
+            <div className="bg-white/10 backdrop-blur-lg border border-white/10 rounded-2xl p-8 flex flex-col items-center text-center shadow-[0_0_20px_#A855F7]/10 hover:shadow-[0_0_30px_#A855F7]/20 transition-all duration-300">
+              <h3 className="text-2xl font-bold text-purple-300 mb-2">Free</h3>
+              <div className="text-4xl font-extrabold text-white mb-4">$0<span className="text-lg font-medium text-white/60">/mo</span></div>
+              <ul className="text-white/80 mb-6 space-y-2">
+                <li>Up to 50 transactions/month</li>
+                <li>Basic budgeting tools</li>
+                <li>Pie chart analytics</li>
+                <li>Email support</li>
+              </ul>
+              <button className="w-full bg-gradient-to-r from-purple-600 via-purple-400 to-purple-600 bg-size-200 bg-pos-0 hover:bg-pos-100 text-white font-bold py-2 rounded-xl animate-gradient transition-all cursor-pointer">Get Started</button>
+            </div>
+            {/* Pro Plan */}
+            <div className="bg-white/20 backdrop-blur-lg border-2 border-purple-400/40 rounded-2xl p-8 flex flex-col items-center text-center shadow-[0_0_30px_#A855F7]/20 hover:shadow-[0_0_40px_#A855F7]/30 transition-all duration-300 scale-105">
+              <h3 className="text-2xl font-bold text-purple-200 mb-2">Pro</h3>
+              <div className="text-4xl font-extrabold text-white mb-4">$7<span className="text-lg font-medium text-white/60">/mo</span></div>
+              <ul className="text-white/90 mb-6 space-y-2">
+                <li>Unlimited transactions</li>
+                <li>Advanced budgeting & analytics</li>
+                <li>AI-powered spending evaluation</li>
+                <li>Priority email support</li>
+              </ul>
+              <button className="w-full bg-gradient-to-r from-purple-600 via-purple-400 to-purple-600 bg-size-200 bg-pos-0 hover:bg-pos-100 text-white font-bold py-2 rounded-xl animate-gradient transition-all cursor-pointer">Upgrade to Pro</button>
+            </div>
+            {/* Ultimate Plan */}
+            <div className="bg-white/10 backdrop-blur-lg border border-white/10 rounded-2xl p-8 flex flex-col items-center text-center shadow-[0_0_20px_#A855F7]/10 hover:shadow-[0_0_30px_#A855F7]/20 transition-all duration-300">
+              <h3 className="text-2xl font-bold text-purple-300 mb-2">Ultimate</h3>
+              <div className="text-4xl font-extrabold text-white mb-4">$15<span className="text-lg font-medium text-white/60">/mo</span></div>
+              <ul className="text-white/80 mb-6 space-y-2">
+                <li>Everything in Pro</li>
+                <li>Personalized AI financial coaching</li>
+                <li>Early access to new features</li>
+                <li>1-on-1 onboarding</li>
+              </ul>
+              <button className="w-full bg-gradient-to-r from-purple-600 via-purple-400 to-purple-600 bg-size-200 bg-pos-0 hover:bg-pos-100 text-white font-bold py-2 rounded-xl animate-gradient transition-all cursor-pointer">Go Ultimate</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Testimonial Section */}
       <section className="py-20 px-4">
         <div className="max-w-5xl mx-auto">
