@@ -87,6 +87,46 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Testimonial Section */}
+      <section className="py-20 px-4">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-4xl font-bold text-center text-white mb-16">
+            What Our Users Say
+          </h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Testimonial 1 */}
+            <div className="bg-white/10 backdrop-blur-lg border border-purple-400/20 rounded-2xl p-8 flex flex-col items-center text-center shadow-[0_0_20px_#A855F7]/10 hover:shadow-[0_0_30px_#A855F7]/20 transition-all duration-300">
+              <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User" className="w-16 h-16 rounded-full border-4 border-purple-300 mb-4 shadow-lg" />
+              <p className="text-white/80 text-lg mb-4 italic">“FundMap helped me finally stick to my budget and save for my dream vacation. The AI tips are spot on!”</p>
+              <span className="text-purple-300 font-bold">Priya S.</span>
+              <span className="text-white/50 text-sm">Marketing Manager</span>
+            </div>
+            {/* Testimonial 2 */}
+            <div className="bg-white/10 backdrop-blur-lg border border-purple-400/20 rounded-2xl p-8 flex flex-col items-center text-center shadow-[0_0_20px_#A855F7]/10 hover:shadow-[0_0_30px_#A855F7]/20 transition-all duration-300">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" className="w-16 h-16 rounded-full border-4 border-purple-300 mb-4 shadow-lg" />
+              <p className="text-white/80 text-lg mb-4 italic">“The dashboard is beautiful and easy to use. I love seeing my spending breakdown and getting instant feedback.”</p>
+              <span className="text-purple-300 font-bold">Alex R.</span>
+              <span className="text-white/50 text-sm">Software Engineer</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="w-full bg-white/10 backdrop-blur-lg border-t border-purple-400/20 py-8 px-4 mt-20">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-xl font-bold text-purple-300 drop-shadow-[0_0_10px_#A855F7]">[FM]</span>
+          </div>
+          <div className="flex gap-6 text-white/70 text-sm">
+            <a href="#" className="hover:text-purple-300 transition-colors">About</a>
+            <a href="#" className="hover:text-purple-300 transition-colors">Privacy</a>
+            <a href="#" className="hover:text-purple-300 transition-colors">Contact</a>
+          </div>
+          <div className="text-white/40 text-xs">&copy; {new Date().getFullYear()} FundMap. All rights reserved.</div>
+        </div>
+      </footer>
     </main>
   );
 }
