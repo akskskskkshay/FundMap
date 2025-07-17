@@ -54,7 +54,7 @@ export default function EvaluationTab({ expenses, user }: EvaluationTabProps) {
         );
         setBudgets(defaultBudgets);
         setBudgetsLoaded(true);
-        setLoading(false);
+        setLoading(false); // Only set loading false here if no user (no OpenAI call)
         return;
       }
       
@@ -70,7 +70,7 @@ export default function EvaluationTab({ expenses, user }: EvaluationTabProps) {
           // Set defaults on error
           setBudgets(Object.fromEntries(categories.map((cat) => [cat, DEFAULTS[period].budget])));
           setBudgetsLoaded(true);
-          setLoading(false);
+          // Do NOT setLoading(false) here
           return;
         }
 
@@ -95,7 +95,7 @@ export default function EvaluationTab({ expenses, user }: EvaluationTabProps) {
         setBudgets(Object.fromEntries(categories.map((cat) => [cat, DEFAULTS[period].budget])));
       } finally {
         setBudgetsLoaded(true);
-        setLoading(false);
+        // Do NOT setLoading(false) here
       }
     };
 

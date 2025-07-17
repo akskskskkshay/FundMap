@@ -14,7 +14,7 @@ interface DashboardTabsProps {
 const tabs = [
   { label: 'Overview', value: 'overview' },
   { label: 'Budgeting', value: 'budgeting' },
-  { label: 'Evaluation', value: 'evaluation' },
+  { label: 'AI Evaluation', value: 'evaluation' },
 ];
 
 export default function DashboardTabs({ expenses, user }: DashboardTabsProps) {
