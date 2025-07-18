@@ -34,9 +34,9 @@ export default function Login() {
         setIsInvalidData(false)
         setIsLoading(true)
 
-        let data, error
+        let error
         if(isLogin) {
-            ({ data, error } =await supabase.auth.signInWithPassword({
+            ({ error } =await supabase.auth.signInWithPassword({
             email: userCreds.email,
             password: userCreds.password
         }))
