@@ -15,6 +15,19 @@ import { evaluateSpending } from "@/lib/evaluateSpending";
 import DashboardTabs from '@/components/DashboardTabs';
 
 
+type SpendingEvaluation = {
+  assessment: string;
+  analysis: Array<{
+    category: string;
+    spent: number;
+    budget: number;
+    percentage: number;
+  }>;
+  totalSpent: number;
+  totalBudget: number;
+  overallPercentage: number;
+};
+
 const Dashboard = () => {
     const [user, setUser] = useState<User | null>(null);
     const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -22,7 +35,7 @@ const Dashboard = () => {
     const [showModal, setShowModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [userName, setUserName] = useState<string>()
-    const [spendingEvaluation, setSpendingEvaluation] = useState<any>(null);
+    const [spendingEvaluation, setSpendingEvaluation] = useState<SpendingEvaluation | null>(null);
     const [evaluatingSpending, setEvaluatingSpending] = useState(false);
 
 

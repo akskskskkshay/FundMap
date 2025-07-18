@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import type { Expense, Budget } from '@/types';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -15,13 +16,13 @@ export async function POST(request: NextRequest) {
     const spendingByCategory: { [key: string]: number } = {};
     const budgetByCategory: { [key: string]: number } = {};
 
-    expenses.forEach((expense: any) => {
+    expenses.forEach((expense: Expense) => {
       if (!spendingByCategory[expense.category]) {
         spendingByCategory[expense.category] = 0;
       }
       spendingByCategory[expense.category] += expense.amount;
     });
-    budgets.forEach((budget: any) => {
+    budgets.forEach((budget: Budget) => {
       budgetByCategory[budget.category] = budget.amount;
     });
 

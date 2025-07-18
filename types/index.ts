@@ -18,6 +18,11 @@ export type Expense = {
   user_id: string;
 };
 
+export type Budget = {
+  category: string;
+  amount: number;
+};
+
 export type FormData = {
     title: string,
     amount: string,
