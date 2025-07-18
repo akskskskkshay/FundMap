@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Navbar } from "@/components"
 import { Analytics } from "@vercel/analytics/next"
+import AuthListener from '@/components/AuthListener';
 
 
 export const metadata: Metadata = {
@@ -24,6 +25,7 @@ export default function RootLayout({
           <div className="absolute bottom-[5%] right-[5%] w-[300px] h-[300px] bg-[#06B6D4]/20 rounded-full blur-[120px] z-0" />
 
           <div className="relative z-10">
+            <AuthListener />
             <Navbar />
             {children}
             <Analytics />
