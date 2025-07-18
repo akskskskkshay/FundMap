@@ -7,19 +7,6 @@ export type CategPieProps = {
   expense: Expense[];
 };
 
-const categories = [
-  "Food",
-  "Transport",
-  "Shopping",
-  "Bills",
-  "Entertainment",
-  "Health",
-  "Travel",
-  "Subscriptions",
-  "Luxury",
-  "Investment",
-];
-
 const colors = [
   "url(#purple1)",
   "url(#purple2)",
@@ -153,7 +140,7 @@ const CategPie: React.FC<CategPieProps> = ({ expense }) => {
         <div className={`relative w-[260px] h-[260px] mb-6 transition-all duration-700 ${mounted ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
           <svg width={240} height={240} viewBox="0 0 240 240">
             {gradients}
-            {segments.map((seg, i) =>
+            {segments.map((seg) =>
               seg.value > 0 ? (
                 <path
                   key={seg.name}
@@ -192,7 +179,7 @@ const CategPie: React.FC<CategPieProps> = ({ expense }) => {
         </div>
         <div className="w-full max-w-[320px] space-y-2">
           {segments.map(
-            (seg, i) =>
+            (seg) =>
               seg.value > 0 && (
                 <div
                   key={seg.name}

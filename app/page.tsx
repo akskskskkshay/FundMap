@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, PieChart, Target, TrendingUp, Shield } from 'lucide-react';
 import type { Metadata } from 'next';
+import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: 'Home | FundMap',
@@ -144,14 +145,14 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-8">
             {/* Testimonial 1 */}
             <div className="bg-white/10 backdrop-blur-lg border border-purple-400/20 rounded-2xl p-8 flex flex-col items-center text-center shadow-[0_0_20px_#A855F7]/10 hover:shadow-[0_0_30px_#A855F7]/20 transition-all duration-300">
-              <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User" className="w-16 h-16 rounded-full border-4 border-purple-300 mb-4 shadow-lg" />
+              <Image src="https://randomuser.me/api/portraits/women/44.jpg" alt="User" width={64} height={64} className="w-16 h-16 rounded-full border-4 border-purple-300 mb-4 shadow-lg" />
               <p className="text-white/80 text-lg mb-4 italic">“FundMap helped me finally stick to my budget and save for my dream vacation. The AI tips are spot on!”</p>
               <span className="text-purple-300 font-bold">Priya S.</span>
               <span className="text-white/50 text-sm">Marketing Manager</span>
             </div>
             {/* Testimonial 2 */}
             <div className="bg-white/10 backdrop-blur-lg border border-purple-400/20 rounded-2xl p-8 flex flex-col items-center text-center shadow-[0_0_20px_#A855F7]/10 hover:shadow-[0_0_30px_#A855F7]/20 transition-all duration-300">
-              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" className="w-16 h-16 rounded-full border-4 border-purple-300 mb-4 shadow-lg" />
+              <Image src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" width={64} height={64} className="w-16 h-16 rounded-full border-4 border-purple-300 mb-4 shadow-lg" />
               <p className="text-white/80 text-lg mb-4 italic">“The dashboard is beautiful and easy to use. I love seeing my spending breakdown and getting instant feedback.”</p>
               <span className="text-purple-300 font-bold">Alex R.</span>
               <span className="text-white/50 text-sm">Software Engineer</span>

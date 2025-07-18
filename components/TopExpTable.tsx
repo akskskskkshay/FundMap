@@ -1,9 +1,4 @@
-'use client'
-
-import React, { useState } from 'react'
 import {Expense} from "@/types/index"
-import { useEffect } from 'react';
-
 
 
 type TopExpTableProps = {
@@ -12,13 +7,6 @@ type TopExpTableProps = {
 
 const TopExpTable = ({expense}: TopExpTableProps) => {
 
-  const [total, setTotal] = useState(0)
-
-  useEffect(() => {
-    const amounts = expense.slice(0, 5).map(expense => expense.amount);
-    const total = amounts.reduce((acc, curr) => acc + curr, 0);
-    setTotal(total)
-  }, [expense])
 
   return (
 

@@ -40,7 +40,6 @@ export default function Budgeting({ expenses, user }: BudgetingProps) {
   const [budgets, setBudgets] = useState<{ [key: string]: number }>(
     Object.fromEntries(categories.map((cat) => [cat, DEFAULTS['month'].budget]))
   );
-  const [isLoading, setIsLoading] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   // Fetch existing budgets from Supabase
@@ -94,7 +93,6 @@ export default function Budgeting({ expenses, user }: BudgetingProps) {
     if (!user) return;
 
     try {
-      setIsLoading(true);
       
       console.log('Updating budget:', { user_id: user.id, category, amount, period });
       
@@ -118,7 +116,7 @@ export default function Budgeting({ expenses, user }: BudgetingProps) {
     } catch (error) {
       console.error('Error updating budget:', error);
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false); // Removed as per edit hint
     }
   };
 

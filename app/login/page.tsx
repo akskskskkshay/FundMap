@@ -2,7 +2,7 @@
 
 import { Anton } from 'next/font/google';
 import { supabase } from '@/lib/supabaseClient';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { clsx } from 'clsx';
 import { useRouter } from "next/navigation"
 import { Eye, EyeOff, ArrowLeft } from "lucide-react"
@@ -19,7 +19,6 @@ export default function Login() {
     const [pwdVerify, SetPwdVerify] = useState<string>("")
     const [isLogin, setIsLogin] = useState(true);
     const [isInvalidData, setIsInvalidData] = useState(false);
-    const [isTouched, setIsTouched] = useState({name: false, email: false, pwd: false, repwd: false})
     const [pwdMis, setPwdMis] = useState(false); 
     const [isLoading, setIsLoading] = useState(false);
     const [isNotConfirmed, setIsNotConfirmed] = useState(false);
@@ -66,7 +65,6 @@ export default function Login() {
                 SetPwdVerify("");
                 setIsInvalidData(false)
                 setIsNotConfirmed(false)
-                setIsTouched({name: false, email: false, pwd: false, repwd: false})
                 setIsLogin(true)
                 setIsLoading(false)
                 console.log("Authenticated Successfully!", data)
@@ -140,7 +138,7 @@ export default function Login() {
                 )}
                 {pwdMis && (
                     <div className='mb-6 p-4 rounded-xl bg-red-500/20 border border-red-400/40 text-red-300 text-center'>
-                        Passwords don't match. Please try again.
+                        Passwords don&apos;t match. Please try again.
                     </div>
                 )}
 
@@ -149,7 +147,6 @@ export default function Login() {
                         <div>
                             <input
                                 type="text"
-                                onBlur={()=> {setIsTouched(prev => ({...prev, name: true}))}}
                                 required
                                 placeholder="Full Name"
                                 onChange={(e) => setUserCreds(prev => ({...prev, fullName: e.target.value}))}
@@ -161,7 +158,6 @@ export default function Login() {
                     
                     <div>
                         <input
-                            onBlur={()=> {setIsTouched(prev => ({...prev, email: true}))}}
                             type="email"   
                             required
                             placeholder="Email Address"
@@ -175,7 +171,6 @@ export default function Login() {
                         <input
                             type={showPwd ? "text" : "password"}
                             ref={inputRef}
-                            onBlur={()=> {setIsTouched(prev => ({...prev, pwd: true}))}}
                             required
                             placeholder="Password"
                             onChange={(e) => setUserCreds({...userCreds, password: e.target.value})}
@@ -195,7 +190,6 @@ export default function Login() {
                         <div>
                             <input
                                 type="password"
-                                onBlur={()=> {setIsTouched(prev => ({...prev, repwd: true}))}}
                                 required
                                 placeholder="Confirm Password"
                                 onChange={(e) => SetPwdVerify(e.target.value)}
@@ -218,12 +212,11 @@ export default function Login() {
                 <div className="mt-8 text-center">
                     {isLogin ? (
                         <p className='text-white/70'>
-                            Don't have an account?{' '}
+                            Don&apos;t have an account?{' '}
                             <button 
                                 onClick={() => {
                                     setIsLogin(false); 
                                     setUserCreds({fullName: '', email: '', password: ''}); 
-                                    setIsTouched({name: false, email: false, pwd: false, repwd: false}); 
                                     setIsInvalidData(false)
                                 }} 
                                 className='text-purple-300 hover:text-purple-200 underline transition-colors duration-200'
@@ -237,8 +230,7 @@ export default function Login() {
                             <button 
                                 onClick={() => {
                                     setIsLogin(true); 
-                                    setUserCreds({fullName: '', email: '', password: ''}); 
-                                    setIsTouched({name: false, email: false, pwd: false, repwd: false}); 
+                                    setUserCreds({fullName: '', email: '', password: ''});
                                     setIsInvalidData(false)
                                 }} 
                                 className='text-purple-300 hover:text-purple-200 underline transition-colors duration-200'

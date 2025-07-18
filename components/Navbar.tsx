@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
 import { clsx } from "clsx"
 import { Inter } from "next/font/google"
@@ -22,7 +21,7 @@ const Navbar = () => {
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        const {data} = supabase.auth.onAuthStateChange((event, session) => {
+        const {data} = supabase.auth.onAuthStateChange((event, _session) => {
             console.log(event)
             
             if(event === "SIGNED_OUT"){
@@ -36,7 +35,12 @@ const Navbar = () => {
 
         const getSession = async () => {
             const { data } = await supabase.auth.getSession()
-            {data.session ? setIsLogged(true) : setIsLogged(false)}
+
+            if (data.session) {
+              setIsLogged(true);
+            } else {
+              setIsLogged(false);
+            }
         }
     
         getSession()

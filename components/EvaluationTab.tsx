@@ -205,7 +205,7 @@ export default function EvaluationTab({ expenses, user }: EvaluationTabProps) {
                 </>
               ) : (
                 <div className="text-center py-4">
-                  <span className="text-green-400 font-semibold">Great job! You're staying within budget across all categories.</span>
+                  <span className="text-green-400 font-semibold">Great job! You&apos;re staying within budget across all categories.</span>
                 </div>
               )}
             </div>

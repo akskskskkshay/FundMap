@@ -5,9 +5,8 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import type { User } from "@supabase/supabase-js";
-import { DashboardCard, ExpenseModal, TopExpTable } from "@/components";
+import { DashboardCard, ExpenseModal } from "@/components";
 import type { Expense, FormData } from "@/types";
-import CategPie from "@/components/CategPie";
 import { categorizeFromClient } from "@/actions/categorizeExpenseAction";
 import { IndianRupee } from "lucide-react";
 import { capitalize } from "@/utils/capitalize";
@@ -89,14 +88,14 @@ const Dashboard = () => {
 
     //send to login if signout
     useEffect(()=>{
-            const {data} = supabase.auth.onAuthStateChange((event, session) => {
+            const {data} = supabase.auth.onAuthStateChange((event, _session) => {
                 if(event === "SIGNED_OUT"){
                     router.replace("/login")
                 }
             })
 
             return() => {data.subscription.unsubscribe()}
-        }, [])
+        }, [router])
 
     
     
