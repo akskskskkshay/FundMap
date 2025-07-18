@@ -23,6 +23,7 @@ export default function Login() {
     const [isLoading, setIsLoading] = useState(false);
     const [isNotConfirmed, setIsNotConfirmed] = useState(false);
     const [showPwd, setShowPwd] = useState(false);
+    const [isRedirecting, setIsRedirecting] = useState(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
@@ -70,7 +71,8 @@ export default function Login() {
                 setIsNotConfirmed(false)
                 setIsLogin(true)
                 setIsLoading(false)
-                console.log("Authenticated Successfully!", data)
+                setIsRedirecting(true);
+                router.push('/dashboard');
             }    
         }
         else {
@@ -101,6 +103,17 @@ export default function Login() {
         }
     }
     
+    if (isRedirecting) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900">
+                <div className="flex flex-col items-center">
+                    <div className="loader mb-4"></div>
+                    <p className="text-white/80 text-lg">Redirecting to dashboard...</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 flex items-center justify-center px-4 relative">
             {/* Background decoration */}
@@ -222,7 +235,7 @@ export default function Login() {
                                     setUserCreds({fullName: '', email: '', password: ''}); 
                                     setIsInvalidData(false)
                                 }} 
-                                className='text-purple-300 hover:text-purple-200 underline transition-colors duration-200'
+                                className='text-purple-300 hover:text-purple-200 underline transition-colors duration-200 cursor-pointer'
                             >
                                 Sign Up
                             </button>
@@ -236,7 +249,7 @@ export default function Login() {
                                     setUserCreds({fullName: '', email: '', password: ''});
                                     setIsInvalidData(false)
                                 }} 
-                                className='text-purple-300 hover:text-purple-200 underline transition-colors duration-200'
+                                className='text-purple-300 hover:text-purple-200 underline transition-colors duration-200 cursor-pointer'
                             >
                                 Sign In
                             </button>
