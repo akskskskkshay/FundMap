@@ -66,7 +66,7 @@ const Dashboard = () => {
             }
         }
         getSession();
-    }, [router]);
+    }, []); // Remove router dependency to prevent conflicts
 
     //fetch data to expenses state
     useEffect(() => {

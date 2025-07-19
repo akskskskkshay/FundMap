@@ -21,35 +21,25 @@ const Navbar = () => {
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        const {data} = supabase.auth.onAuthStateChange((event, _session) => {
-            console.log(event)
-            
-            if(event === "SIGNED_OUT"){
-                setIsLogged(false)
-            }
-            else if(event === "SIGNED_IN"){
-                setIsLogged(true)
-            }
-        })
-
-
         const getSession = async () => {
             const { data } = await supabase.auth.getSession()
-
             if (data.session) {
               setIsLogged(true);
             } else {
               setIsLogged(false);
             }
         }
-    
         getSession()
 
+        // Listen for auth changes to update UI state only
+        const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+            setIsLogged(!!session);
+        });
 
-        return() => {
-            data.subscription.unsubscribe()
-        }
-}, [])
+        return () => {
+            authListener.subscription.unsubscribe();
+        };
+    }, [])
 
      const handleSignout = async () => {
         setLoading(true)

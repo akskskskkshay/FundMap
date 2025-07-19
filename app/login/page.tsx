@@ -62,13 +62,6 @@ export default function Login() {
                 return
             }
             else {
-                const { data: authListener } = supabase.auth.onAuthStateChange((event, _session) => {
-                  if (event === 'SIGNED_IN') {
-                    router.push('/dashboard');
-                    authListener.subscription.unsubscribe();
-                  }
-                });
-
                 setUserCreds({fullName: '', email: '', password: ''}); 
                 SetPwdVerify("");
                 setIsInvalidData(false)
