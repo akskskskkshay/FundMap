@@ -36,9 +36,9 @@ export default function Login() {
         setIsError(false)
         setIsLoading(true)
 
-        let error
+        let data, error
         if(isLogin) {
-            ({ error } =await supabase.auth.signInWithPassword({
+            ({ data, error } =await supabase.auth.signInWithPassword({
             email: userCreds.email,
             password: userCreds.password
         }))
@@ -54,6 +54,7 @@ export default function Login() {
                     setIsLoading(false)
                 }
                 else{
+                    
                     setTimeout(() => {
                         setIsError(true)
                         setIsLoading(false)
@@ -69,9 +70,12 @@ export default function Login() {
                 setIsLogin(true)
                 setIsLoading(false)
                 setIsRedirecting(true);
-                setTimeout(() => {
-                    router.push('/dashboard');
-                }, 2000)
+                if (data?.session) {
+                    setTimeout(() => {
+                      console.log("Pushing from handleLogin");
+                      router.push('/dashboard')
+                    }, 2000)
+                  }
             }    
         }
         else {
