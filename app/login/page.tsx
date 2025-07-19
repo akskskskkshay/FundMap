@@ -36,9 +36,9 @@ export default function Login() {
         setIsError(false)
         setIsLoading(true)
 
-        let data, error
+        let error
         if(isLogin) {
-            ({ data, error } =await supabase.auth.signInWithPassword({
+            ({ error } =await supabase.auth.signInWithPassword({
             email: userCreds.email,
             password: userCreds.password
         }))
@@ -63,19 +63,29 @@ export default function Login() {
                 return
             }
             else {
-                setUserCreds({fullName: '', email: '', password: ''}); 
-                SetPwdVerify("");
-                setIsInvalidData(false)
-                setIsNotConfirmed(false)
-                setIsLogin(true)
-                setIsLoading(false)
+                
                 setIsRedirecting(true);
-                if (data?.session) {
-                    setTimeout(() => {
-                      console.log("Pushing from handleLogin");
-                      router.push('/dashboard')
-                    }, 2000)
+                let attempts = 0;
+                const maxAttempts = 10; // 10 x 300ms = 3 seconds
+                const poll = setInterval(async () => {
+                  const { data: { session } } = await supabase.auth.getSession();
+                  if (session) {
+                    clearInterval(poll);
+                    setUserCreds({fullName: '', email: '', password: ''}); 
+                    SetPwdVerify("");
+                    setIsInvalidData(false)
+                    setIsNotConfirmed(false)
+                    setIsLogin(true)
+                    setIsLoading(false)
+                    router.push('/dashboard');
+                  } 
+                  else if (++attempts >= maxAttempts) {
+                    clearInterval(poll);
+                    setIsRedirecting(false);
+                    setIsError(true)
+                    // window.location.href = '/dashboard';
                   }
+                }, 800);
             }    
         }
         else {
