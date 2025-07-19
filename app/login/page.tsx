@@ -22,6 +22,7 @@ export default function Login() {
     const [pwdMis, setPwdMis] = useState(false); 
     const [isLoading, setIsLoading] = useState(false);
     const [isNotConfirmed, setIsNotConfirmed] = useState(false);
+    const [isError, setIsError] = useState(false);
     const [showPwd, setShowPwd] = useState(false);
     const [isRedirecting, setIsRedirecting] = useState(false);
 
@@ -32,6 +33,7 @@ export default function Login() {
         e.preventDefault()
         setIsNotConfirmed(false)
         setIsInvalidData(false)
+        setIsError(false)
         setIsLoading(true)
 
         let error
@@ -52,8 +54,10 @@ export default function Login() {
                     setIsLoading(false)
                 }
                 else{
-                    alert("Authentication failed: " + error.message);
-                    setIsLoading(false)
+                    setTimeout(() => {
+                        setIsError(true)
+                        setIsLoading(false)
+                    }, 4000)
                 }
                 return
             }
@@ -157,7 +161,11 @@ export default function Login() {
                         Passwords don&apos;t match. Please try again.
                     </div>
                 )}
-
+                {isError && (
+                    <div className='mb-6 p-4 rounded-xl bg-red-500/20 border border-red-400/40 text-red-300 text-center'>
+                        An error occurred. Please try again later.
+                    </div>
+                )}
                 <form onSubmit={handleLogin} className="space-y-6">
                     {!isLogin && (
                         <div>

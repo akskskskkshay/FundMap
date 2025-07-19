@@ -8,19 +8,25 @@ export async function middleware(req: NextRequest) {
   const supabase = createMiddlewareClient({ req, res })
 
   //Get session
-  const { data: { session } } = await supabase.auth.getSession()
+
   const pathname = req.nextUrl.pathname
 
-  if (pathname.startsWith('/dashboard') && !session) {
-    return NextResponse.redirect(new URL('/login', req.url))
+  if (pathname.startsWith('/dashboard') || pathname === '/login') {
+    
+    const { data: { session } } = await supabase.auth.getSession()
+    if (pathname.startsWith('/dashboard') && !session) {
+      return NextResponse.redirect(new URL('/login', req.url))
+    }
+  
+    if (pathname === '/login' && session) {
+      return NextResponse.redirect(new URL('/dashboard', req.url))
+    }
+  
+    return res
   }
-
-  if (pathname === '/login' && session) {
-    return NextResponse.redirect(new URL('/dashboard', req.url))
-  }
-
-  return res
 }
+
+  
 
 export const config = {
   matcher: ['/dashboard/:path*', '/login'], // only these routes

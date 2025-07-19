@@ -54,6 +54,9 @@ const Navbar = () => {
      const handleSignout = async () => {
         setLoading(true)
         const error = await supabase.auth.signOut();
+        localStorage.clear();
+        sessionStorage.clear();
+        router.push("/login")
         setIsLogged(false)
         setLoading(false)
         console.log(error)

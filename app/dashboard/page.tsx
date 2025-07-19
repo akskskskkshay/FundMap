@@ -87,15 +87,15 @@ const Dashboard = () => {
 
 
     //send to login if signout
-    useEffect(()=>{
-            const {data} = supabase.auth.onAuthStateChange((event, _session) => {
-                if(event === "SIGNED_OUT"){
-                    router.replace("/login")
-                }
-            })
+    // useEffect(()=>{
+    //         const {data} = supabase.auth.onAuthStateChange((event, _session) => {
+    //             if(event === "SIGNED_OUT"){
+    //                 router.replace("/login")
+    //             }
+    //         })
 
-            return() => {data.subscription.unsubscribe()}
-        }, [router])
+    //         return() => {data.subscription.unsubscribe()}
+    //     }, [router])
 
     
     
