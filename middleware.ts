@@ -11,9 +11,8 @@ export async function middleware(req: NextRequest) {
 
   const pathname = req.nextUrl.pathname
 
-  if (pathname.startsWith('/dashboard') || pathname === '/login') {
-    
-    const { data: { session } } = await supabase.auth.getSession()
+   const { data: { session } } = await supabase.auth.getSession()
+    console.log("middleware sess");
     if (pathname.startsWith('/dashboard') && !session) {
       return NextResponse.redirect(new URL('/login', req.url))
     }
@@ -24,7 +23,7 @@ export async function middleware(req: NextRequest) {
   
     return res
   }
-}
+
 
   
 

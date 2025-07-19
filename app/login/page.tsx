@@ -63,29 +63,15 @@ export default function Login() {
                 return
             }
             else {
-                
+                setUserCreds({fullName: '', email: '', password: ''}); 
+                SetPwdVerify("");
+                setIsInvalidData(false)
+                setIsNotConfirmed(false)
+                setIsLogin(true)
+                setIsLoading(false)
                 setIsRedirecting(true);
-                let attempts = 0;
-                const maxAttempts = 10; // 10 x 300ms = 3 seconds
-                const poll = setInterval(async () => {
-                  const { data: { session } } = await supabase.auth.getSession();
-                  if (session) {
-                    clearInterval(poll);
-                    setUserCreds({fullName: '', email: '', password: ''}); 
-                    SetPwdVerify("");
-                    setIsInvalidData(false)
-                    setIsNotConfirmed(false)
-                    setIsLogin(true)
-                    setIsLoading(false)
-                    router.push('/dashboard');
-                  } 
-                  else if (++attempts >= maxAttempts) {
-                    clearInterval(poll);
-                    setIsRedirecting(false);
-                    setIsError(true)
-                    // window.location.href = '/dashboard';
-                  }
-                }, 800);
+                router.push("/dashboard")
+                window.location.href = '/dashboard';
             }    
         }
         else {
