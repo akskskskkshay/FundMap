@@ -69,7 +69,9 @@ export default function Login() {
                 setIsLogin(true)
                 setIsLoading(false)
                 setIsRedirecting(true);
-                router.push('/dashboard');
+                setTimeout(() => {
+                    router.push('/dashboard');
+                }, 2000)
             }    
         }
         else {
@@ -219,8 +221,7 @@ export default function Login() {
                     <button 
                         type="submit"
                         disabled={isLoading}
-                        className='w-full bg-gradient-to-r from-purple-600 via-purple-500 to-purple-600 bg-size-200 bg-pos-0 hover:bg-pos-100 text-white backdrop-blur-md border border-purple-400/40 shadow-[0_0_20px_#A855F7] hover:shadow-[0_0_30px_#A855F7] transition-all p-4 font-bold cursor-pointer duration-200 rounded-xl text-lg animate-gradient flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed'
-                    >
+                        className='w-full bg-gradient-to-r from-purple-600 via-purple-500 to-purple-600 bg-size-200 bg-pos-0 hover:bg-pos-100 text-white backdrop-blur-md border border-purple-400/40 shadow-[0_0_20px_#A855F7] hover:shadow-[0_0_30px_#A855F7] transition-all p-4 font-bold cursor-pointer duration-200 rounded-xl text-lg animate-gradient flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed'>
                         {isLogin ? "Sign In" : "Create Account"}
                         {isLoading && <div className='loader_btn'></div>}
                     </button>
