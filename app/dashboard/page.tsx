@@ -77,7 +77,7 @@ const Dashboard = () => {
                 setExpenses(data ?? []);
                 setFetchedData(true)
             } else {
-                console.log("No User Logged In!", user);
+                console.log("Cant Fetch Data, No User Logged In Yet!", user);
             }
         }
         
